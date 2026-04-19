@@ -36,10 +36,6 @@ internal class EntityFrameworkMovieReviewsRepository
         this.context = context;
         this.timeProvider = timeProvider;
         this.mapper = mapper;
-
-        _ = this.context.Database.EnsureDeleted();
-        _ = this.context.Database.EnsureCreated();
-        _ = this.context.AddData();
     }
 
     #region Authors

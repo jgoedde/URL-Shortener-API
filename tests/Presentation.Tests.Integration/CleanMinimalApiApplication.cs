@@ -3,7 +3,7 @@ namespace UrlShortener.Presentation.Tests.Integration;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
 
-internal sealed class UrlShortenerApplication(string environment = "local")
+internal sealed class UrlShortenerApplication(string environment = "Development")
     : WebApplicationFactory<Program>
 {
     protected override IHost CreateHost(IHostBuilder builder)

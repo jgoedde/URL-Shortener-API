@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <Authors>Stephen Walsh</Authors>
     <Copyright>Stephen Walsh @ 2021</Copyright>
@@ -10,7 +10,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <UserSecretsId>4643e6e8-40c2-4422-84dd-dd51feee631a</UserSecretsId>
+    <UserSecretsId>1b864be2-9e9c-451d-b986-b3f386b6c103</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'UrlShortener' " />
