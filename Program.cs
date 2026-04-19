@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContextPool<AppDbContext>(opt => 
+builder.Services.AddDbContextPool<AppDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 var app = builder.Build();
@@ -26,25 +26,13 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", () =>
+app
+    .MapGet("/{shortCode:required}", async (string shortCode, AppDbContext dbContext) =>
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
+        var url = await dbContext.Urls.FirstAsync(it => it.ShortCode == shortCode); // TODO: Add caching!
+        return Results.Redirect(url.LongUrl); // 302
     })
-    .WithName("GetWeatherForecast");
-
-app.MapGet("/{shortCode:required}", (string shortCode) => { });
+    .WithSummary("Redirects to original URL")
+    .WithDescription("Redirects to original URL with HTTP 302 code by short code.");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
