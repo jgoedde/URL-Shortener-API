@@ -13,7 +13,7 @@ services:
       environment:
         DOTNET_ENVIRONMENT: docker
       networks:
-        - urlshortener_network
+        - urlshortenerapi_network
       depends_on:
         - seq
     seq:
@@ -23,7 +23,7 @@ services:
       environment:
         ACCEPT_EULA: Y
       networks:
-        - cleanwebapi_network
+        - urlshortener_network
 networks:
-  cleanwebapi_network:
+  urlshortener_network:
     driver: bridge
