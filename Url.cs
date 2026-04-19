@@ -7,6 +7,6 @@ public record Url : Entity
     /// Used to resolve the URL.
     /// </summary>
     public string ShortCode { get; init; }
-    
+
     public string LongUrl { get; init; }
 }

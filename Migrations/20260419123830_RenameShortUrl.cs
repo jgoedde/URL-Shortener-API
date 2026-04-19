@@ -10,19 +10,13 @@ namespace UrlShortener.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "ShortUrl",
-                table: "Urls",
-                newName: "ShortCode");
+            migrationBuilder.RenameColumn(name: "ShortUrl", table: "Urls", newName: "ShortCode");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "ShortCode",
-                table: "Urls",
-                newName: "ShortUrl");
+            migrationBuilder.RenameColumn(name: "ShortCode", table: "Urls", newName: "ShortUrl");
         }
     }
 }
