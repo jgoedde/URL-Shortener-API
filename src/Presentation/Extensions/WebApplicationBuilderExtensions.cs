@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application;
-using UrlShortener.Presentation.Serialization;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -15,29 +14,42 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 using Serilog;
+using UrlShortener.Presentation.Serialization;
 
 [ExcludeFromCodeCoverage]
 public static class WebApplicationBuilderExtensions
 {
-    public static WebApplicationBuilder ConfigureApplicationBuilder(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder ConfigureApplicationBuilder(
+        this WebApplicationBuilder builder
+    )
     {
         #region Logging
 
         _ = builder.Services.AddHttpLogging(logging =>
-            logging.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.ResponsePropertiesAndHeaders);
+            logging.LoggingFields =
+                HttpLoggingFields.RequestPropertiesAndHeaders
+                | HttpLoggingFields.ResponsePropertiesAndHeaders
+        );
 
-        _ = builder.Host.UseSerilog((hostContext, loggerConfiguration) =>
-        {
-            var assembly = Assembly.GetEntryAssembly();
+        _ = builder.Host.UseSerilog(
+            (hostContext, loggerConfiguration) =>
+            {
+                var assembly = Assembly.GetEntryAssembly();
 
-            _ = loggerConfiguration.ReadFrom.Configuration(hostContext.Configuration)
-                .Enrich.WithProperty(
-                    "Assembly Version",
-                    assembly?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version)
-                .Enrich.WithProperty(
-                    "Assembly Informational Version",
-                    assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion);
-        });
+                _ = loggerConfiguration
+                    .ReadFrom.Configuration(hostContext.Configuration)
+                    .Enrich.WithProperty(
+                        "Assembly Version",
+                        assembly?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version
+                    )
+                    .Enrich.WithProperty(
+                        "Assembly Informational Version",
+                        assembly
+                            ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                            ?.InformationalVersion
+                    );
+            }
+        );
 
         #endregion Logging
 
@@ -49,7 +61,9 @@ public static class WebApplicationBuilderExtensions
             opt.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             opt.SerializerOptions.PropertyNameCaseInsensitive = true;
             opt.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            opt.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+            opt.SerializerOptions.Converters.Add(
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            );
             opt.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
         });
 
@@ -62,32 +76,40 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddEndpointsApiExplorer();
 
         _ = builder.Services.AddOpenApi(options =>
-            options.AddDocumentTransformer((document, context, cancellationToken) =>
-            {
-                document.Info = new OpenApiInfo
+            options.AddDocumentTransformer(
+                (document, context, cancellationToken) =>
                 {
-                    Version = "v1",
-                    Title = $"UrlShortener API - {ti.ToTitleCase(builder.Environment.EnvironmentName)}",
-                    Description = "An example to share an implementation of Minimal API in .NET 10.",
-                    Contact = new OpenApiContact
+                    document.Info = new OpenApiInfo
                     {
-                        Name = "UrlShortener API",
-                        Url = new Uri("https://github.com/stphnwlsh/cleanminimalapi")
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "UrlShortener API - License - MIT",
-                        Url = new Uri("https://opensource.org/licenses/MIT")
-                    },
-                };
-                return Task.CompletedTask;
-            }));
+                        Version = "v1",
+                        Title =
+                            $"UrlShortener API - {ti.ToTitleCase(builder.Environment.EnvironmentName)}",
+                        Description =
+                            "An example to share an implementation of Minimal API in .NET 10.",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "UrlShortener API",
+                            Url = new Uri("https://github.com/stphnwlsh/cleanminimalapi"),
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "UrlShortener API - License - MIT",
+                            Url = new Uri("https://opensource.org/licenses/MIT"),
+                        },
+                    };
+                    return Task.CompletedTask;
+                }
+            )
+        );
 
         #endregion Swagger
 
         #region Validation
 
-        _ = builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), ServiceLifetime.Singleton);
+        _ = builder.Services.AddValidatorsFromAssembly(
+            Assembly.GetExecutingAssembly(),
+            ServiceLifetime.Singleton
+        );
 
         #endregion Validation
 

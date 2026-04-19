@@ -2,16 +2,17 @@ namespace UrlShortener.Application.Reviews.Commands.UpdateReview;
 
 using System.Threading;
 using System.Threading.Tasks;
-using UrlShortener.Application.Authors;
-using UrlShortener.Application.Movies;
 using Common.Enums;
 using Common.Exceptions;
 using MediatR;
+using UrlShortener.Application.Authors;
+using UrlShortener.Application.Movies;
 
 public class UpdateReviewHandler(
     IAuthorsRepository authorsRepository,
     IMoviesRepository moviesRepository,
-    IReviewsRepository reviewsRepository) : IRequestHandler<UpdateReviewCommand, bool>
+    IReviewsRepository reviewsRepository
+) : IRequestHandler<UpdateReviewCommand, bool>
 {
     public async Task<bool> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
@@ -30,7 +31,12 @@ public class UpdateReviewHandler(
             NotFoundException.Throw(EntityType.Movie);
         }
 
-        return await reviewsRepository
-            .UpdateReview(request.Id, request.AuthorId, request.MovieId, request.Stars, cancellationToken);
+        return await reviewsRepository.UpdateReview(
+            request.Id,
+            request.AuthorId,
+            request.MovieId,
+            request.Stars,
+            cancellationToken
+        );
     }
 }

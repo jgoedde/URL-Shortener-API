@@ -1,7 +1,7 @@
 namespace UrlShortener.Presentation.Tests.Unit.Validators;
 
-using UrlShortener.Presentation.Validators;
 using FluentValidation.TestHelper;
+using UrlShortener.Presentation.Validators;
 using Xunit;
 
 public class GenericIdentityValidatorTests

@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Http;
 
 public static class ValidationFilter
 {
-    public static EndpointFilterDelegate ValidationFilterFactory(EndpointFilterFactoryContext context, EndpointFilterDelegate next)
+    public static EndpointFilterDelegate ValidationFilterFactory(
+        EndpointFilterFactoryContext context,
+        EndpointFilterDelegate next
+    )
     {
         var validationDescriptors = GetValidators(context.MethodInfo, context.ApplicationServices);
 
@@ -19,7 +22,11 @@ public static class ValidationFilter
         return invocationContext => next(invocationContext);
     }
 
-    private static async ValueTask<object> Validate(IEnumerable<ValidationDescriptor> validationDescriptors, EndpointFilterInvocationContext invocationContext, EndpointFilterDelegate next)
+    private static async ValueTask<object> Validate(
+        IEnumerable<ValidationDescriptor> validationDescriptors,
+        EndpointFilterInvocationContext invocationContext,
+        EndpointFilterDelegate next
+    )
     {
         foreach (var descriptor in validationDescriptors)
         {
@@ -41,18 +48,32 @@ public static class ValidationFilter
         return await next.Invoke(invocationContext);
     }
 
-    private static IEnumerable<ValidationDescriptor> GetValidators(MethodInfo methodInfo, IServiceProvider serviceProvider)
+    private static IEnumerable<ValidationDescriptor> GetValidators(
+        MethodInfo methodInfo,
+        IServiceProvider serviceProvider
+    )
     {
-        foreach (var item in methodInfo.GetParameters().Select((parameter, index) => new { parameter, index }))
+        foreach (
+            var item in methodInfo
+                .GetParameters()
+                .Select((parameter, index) => new { parameter, index })
+        )
         {
             if (item.parameter.GetCustomAttribute<ValidateAttribute>() is not null)
             {
-                var validatorType = typeof(IValidator<>).MakeGenericType(item.parameter.ParameterType);
+                var validatorType = typeof(IValidator<>).MakeGenericType(
+                    item.parameter.ParameterType
+                );
                 var validator = serviceProvider.GetService(validatorType) as IValidator;
 
                 if (validator is not null)
                 {
-                    yield return new ValidationDescriptor { ArgumentIndex = item.index, ArgumentType = item.parameter.ParameterType, Validator = validator };
+                    yield return new ValidationDescriptor
+                    {
+                        ArgumentIndex = item.index,
+                        ArgumentType = item.parameter.ParameterType,
+                        Validator = validator,
+                    };
                 }
             }
         }

@@ -9,6 +9,9 @@ internal class MovieConfiguration : EntityConfiguration<Movie>
     {
         base.Configure(builder);
 
-        _ = builder.HasMany(m => m.Reviews).WithOne(r => r.ReviewedMovie).HasForeignKey(r => r.ReviewedMovieId);
+        _ = builder
+            .HasMany(m => m.Reviews)
+            .WithOne(r => r.ReviewedMovie)
+            .HasForeignKey(r => r.ReviewedMovieId);
     }
 }

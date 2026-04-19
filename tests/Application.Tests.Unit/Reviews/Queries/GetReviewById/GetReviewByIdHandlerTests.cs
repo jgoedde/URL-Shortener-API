@@ -16,10 +16,7 @@ public class GetReviewByIdHandlerTests
     public async Task Handle_ShouldPassThrough_Query()
     {
         // Arrange
-        var query = new GetReviewByIdQuery
-        {
-            Id = Guid.Empty
-        };
+        var query = new GetReviewByIdQuery { Id = Guid.Empty };
 
         var context = Substitute.For<IReviewsRepository>();
         var handler = new GetReviewByIdHandler(context);
@@ -40,22 +37,20 @@ public class GetReviewByIdHandlerTests
         result.Stars.ShouldBe(5);
     }
 
-
     [Fact]
     public async Task Handle_ShouldThrowException_DoesNotExist()
     {
         // Arrange
-        var query = new GetReviewByIdQuery
-        {
-            Id = Guid.Empty
-        };
+        var query = new GetReviewByIdQuery { Id = Guid.Empty };
 
         var context = Substitute.For<IReviewsRepository>();
         var handler = new GetReviewByIdHandler(context);
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(query, token));
+        var exception = Should.Throw<NotFoundException>(async () =>
+            await handler.Handle(query, token)
+        );
 
         // Assert
         _ = await context.Received(1).GetReviewById(query.Id, token);

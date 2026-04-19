@@ -16,10 +16,7 @@ public class ReadByIdHandlerTests
     public async Task Handle_ShouldPassThrough_Query()
     {
         // Arrange
-        var query = new GetMovieByIdQuery
-        {
-            Id = Guid.Empty
-        };
+        var query = new GetMovieByIdQuery { Id = Guid.Empty };
 
         var context = Substitute.For<IMoviesRepository>();
         var handler = new GetMovieByIdHandler(context);
@@ -45,17 +42,16 @@ public class ReadByIdHandlerTests
     public async Task Handle_ShouldThrowException_DoesNotExist()
     {
         // Arrange
-        var query = new GetMovieByIdQuery
-        {
-            Id = Guid.Empty
-        };
+        var query = new GetMovieByIdQuery { Id = Guid.Empty };
 
         var context = Substitute.For<IMoviesRepository>();
         var handler = new GetMovieByIdHandler(context);
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(query, token));
+        var exception = Should.Throw<NotFoundException>(async () =>
+            await handler.Handle(query, token)
+        );
 
         // Assert
         _ = await context.Received(1).GetMovieById(query.Id, token);

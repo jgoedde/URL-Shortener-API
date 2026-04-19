@@ -1,9 +1,9 @@
 namespace UrlShortener.Presentation.Extensions;
 
 using System.Diagnostics.CodeAnalysis;
-using UrlShortener.Presentation.Endpoints;
 using Microsoft.AspNetCore.Builder;
 using Serilog;
+using UrlShortener.Presentation.Endpoints;
 
 [ExcludeFromCodeCoverage]
 public static class WebApplicationExtensions
@@ -32,7 +32,9 @@ public static class WebApplicationExtensions
         #region Swagger
 
         _ = app.MapOpenApi();
-        _ = app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "UrlShortener API v1"));
+        _ = app.UseSwaggerUI(options =>
+            options.SwaggerEndpoint("/openapi/v1.json", "UrlShortener API v1")
+        );
 
         #endregion Swagger
 

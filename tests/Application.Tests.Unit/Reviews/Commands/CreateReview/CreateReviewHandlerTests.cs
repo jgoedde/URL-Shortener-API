@@ -21,7 +21,7 @@ public class CreateHandlerTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         var authorsRepository = Substitute.For<IAuthorsRepository>();
@@ -31,7 +31,11 @@ public class CreateHandlerTests
         _ = authorsRepository.AuthorExists(default, default).ReturnsForAnyArgs(true);
         _ = moviesRepository.MovieExists(default, default).ReturnsForAnyArgs(true);
 
-        var handler = new CreateReviewHandler(authorsRepository, moviesRepository, reviewsRepository);
+        var handler = new CreateReviewHandler(
+            authorsRepository,
+            moviesRepository,
+            reviewsRepository
+        );
         var token = new CancellationTokenSource().Token;
 
         // Act
@@ -40,7 +44,9 @@ public class CreateHandlerTests
         // Assert
         _ = await authorsRepository.Received(1).AuthorExists(command.AuthorId, token);
         _ = await moviesRepository.Received(1).MovieExists(command.MovieId, token);
-        _ = await reviewsRepository.Received(1).CreateReview(command.AuthorId, command.MovieId, command.Stars, token);
+        _ = await reviewsRepository
+            .Received(1)
+            .CreateReview(command.AuthorId, command.MovieId, command.Stars, token);
     }
 
     [Fact]
@@ -51,7 +57,7 @@ public class CreateHandlerTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         var authorsRepository = Substitute.For<IAuthorsRepository>();
@@ -61,18 +67,26 @@ public class CreateHandlerTests
         _ = authorsRepository.AuthorExists(default, default).ReturnsForAnyArgs(false);
         _ = moviesRepository.MovieExists(default, default).ReturnsForAnyArgs(true);
 
-        var handler = new CreateReviewHandler(authorsRepository, moviesRepository, reviewsRepository);
+        var handler = new CreateReviewHandler(
+            authorsRepository,
+            moviesRepository,
+            reviewsRepository
+        );
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(command, token));
+        var exception = Should.Throw<NotFoundException>(async () =>
+            await handler.Handle(command, token)
+        );
 
         // Assert
         exception.Message.ShouldBe("The Author with the supplied id was not found.");
 
         _ = await authorsRepository.Received(1).AuthorExists(command.AuthorId, token);
         _ = await moviesRepository.DidNotReceive().MovieExists(command.MovieId, token);
-        _ = await reviewsRepository.DidNotReceive().CreateReview(command.AuthorId, command.MovieId, command.Stars, token);
+        _ = await reviewsRepository
+            .DidNotReceive()
+            .CreateReview(command.AuthorId, command.MovieId, command.Stars, token);
     }
 
     [Fact]
@@ -83,7 +97,7 @@ public class CreateHandlerTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
         var authorsRepository = Substitute.For<IAuthorsRepository>();
         var moviesRepository = Substitute.For<IMoviesRepository>();
@@ -92,17 +106,25 @@ public class CreateHandlerTests
         _ = authorsRepository.AuthorExists(default, default).ReturnsForAnyArgs(true);
         _ = moviesRepository.MovieExists(default, default).ReturnsForAnyArgs(false);
 
-        var handler = new CreateReviewHandler(authorsRepository, moviesRepository, reviewsRepository);
+        var handler = new CreateReviewHandler(
+            authorsRepository,
+            moviesRepository,
+            reviewsRepository
+        );
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(command, token));
+        var exception = Should.Throw<NotFoundException>(async () =>
+            await handler.Handle(command, token)
+        );
 
         // Assert
         exception.Message.ShouldBe("The Movie with the supplied id was not found.");
 
         _ = await authorsRepository.Received(1).AuthorExists(command.AuthorId, token);
         _ = await moviesRepository.Received(1).MovieExists(command.MovieId, token);
-        _ = await reviewsRepository.DidNotReceive().CreateReview(command.AuthorId, command.MovieId, command.Stars, token);
+        _ = await reviewsRepository
+            .DidNotReceive()
+            .CreateReview(command.AuthorId, command.MovieId, command.Stars, token);
     }
 }

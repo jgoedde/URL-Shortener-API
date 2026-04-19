@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <Authors>Stephen Walsh</Authors>
     <Copyright>Stephen Walsh @ 2021</Copyright>
@@ -37,5 +36,4 @@
       <_Parameter1>$(AssemblyName).Tests.Integration</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
 </Project>

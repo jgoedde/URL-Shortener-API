@@ -1,12 +1,12 @@
 namespace UrlShortener.Presentation.Endpoints;
 
-using UrlShortener.Application.Common.Exceptions;
-using UrlShortener.Presentation.Filters;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using UrlShortener.Application.Common.Exceptions;
+using UrlShortener.Presentation.Filters;
 using Entities = Application.Movies.Entities;
 using Queries = Application.Movies.Queries;
 
@@ -36,7 +36,9 @@ public static class MovieEndpoints
         return app;
     }
 
-    public static async Task<Results<Ok<List<Entities.Movie>>, ProblemHttpResult>> GetMovies([FromServices] ISender sender)
+    public static async Task<Results<Ok<List<Entities.Movie>>, ProblemHttpResult>> GetMovies(
+        [FromServices] ISender sender
+    )
     {
         try
         {
@@ -44,18 +46,23 @@ public static class MovieEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 
-    public static async Task<Results<Ok<Entities.Movie>, NotFound<string>, ProblemHttpResult>> GetMovieById([Validate][FromRoute] Guid id, [FromServices] ISender sender)
+    public static async Task<
+        Results<Ok<Entities.Movie>, NotFound<string>, ProblemHttpResult>
+    > GetMovieById([Validate] [FromRoute] Guid id, [FromServices] ISender sender)
     {
         try
         {
-            return TypedResults.Ok(await sender.Send(new Queries.GetMovieById.GetMovieByIdQuery
-            {
-                Id = id
-            }));
+            return TypedResults.Ok(
+                await sender.Send(new Queries.GetMovieById.GetMovieByIdQuery { Id = id })
+            );
         }
         catch (NotFoundException ex)
         {
@@ -63,7 +70,11 @@ public static class MovieEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 }

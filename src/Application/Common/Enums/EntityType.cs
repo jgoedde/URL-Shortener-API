@@ -4,5 +4,5 @@ public enum EntityType
 {
     Author,
     Movie,
-    Review
+    Review,
 }

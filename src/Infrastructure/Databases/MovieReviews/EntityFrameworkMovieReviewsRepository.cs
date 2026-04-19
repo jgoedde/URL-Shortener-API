@@ -14,7 +14,10 @@ using ApplicationAuthor = Application.Authors.Entities.Author;
 using ApplicationMovie = Application.Movies.Entities.Movie;
 using ApplicationReview = Application.Reviews.Entities.Review;
 
-internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMoviesRepository, IReviewsRepository
+internal class EntityFrameworkMovieReviewsRepository
+    : IAuthorsRepository,
+        IMoviesRepository,
+        IReviewsRepository
 {
     private readonly MovieReviewsDbContext context;
     private readonly TimeProvider timeProvider;
@@ -23,7 +26,8 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
     public EntityFrameworkMovieReviewsRepository(
         MovieReviewsDbContext context,
         TimeProvider timeProvider,
-        IMapper mapper)
+        IMapper mapper
+    )
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(timeProvider);
@@ -40,22 +44,28 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
 
     #region Authors
 
-    public virtual async Task<List<ApplicationAuthor>> GetAuthors(CancellationToken cancellationToken)
+    public virtual async Task<List<ApplicationAuthor>> GetAuthors(
+        CancellationToken cancellationToken
+    )
     {
-        var authors = await this.context.Authors
-            .Include(a => a.Reviews)
-            .ThenInclude(r => r.ReviewedMovie)
+        var authors = await this
+            .context.Authors.Include(a => a.Reviews)
+                .ThenInclude(r => r.ReviewedMovie)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
         return this.mapper.Map<List<ApplicationAuthor>>(authors);
     }
 
-    public virtual async Task<ApplicationAuthor> GetAuthorById(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<ApplicationAuthor> GetAuthorById(
+        Guid id,
+        CancellationToken cancellationToken
+    )
     {
-        var author = await this.context.Authors
-            .Where(r => r.Id == id).Include(a => a.Reviews)
-            .ThenInclude(r => r.ReviewedMovie)
+        var author = await this
+            .context.Authors.Where(r => r.Id == id)
+            .Include(a => a.Reviews)
+                .ThenInclude(r => r.ReviewedMovie)
             .AsNoTracking()
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -65,7 +75,9 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
 
     public virtual async Task<bool> AuthorExists(Guid id, CancellationToken cancellationToken)
     {
-        return await this.context.Authors.AsNoTracking().AnyAsync(a => a.Id == id, cancellationToken);
+        return await this
+            .context.Authors.AsNoTracking()
+            .AnyAsync(a => a.Id == id, cancellationToken);
     }
 
     #endregion Authors
@@ -74,21 +86,24 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
 
     public virtual async Task<List<ApplicationMovie>> GetMovies(CancellationToken cancellationToken)
     {
-        var result = await this.context.Movies
-            .Include(m => m.Reviews)
-            .ThenInclude(r => r.ReviewAuthor)
+        var result = await this
+            .context.Movies.Include(m => m.Reviews)
+                .ThenInclude(r => r.ReviewAuthor)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
         return this.mapper.Map<List<ApplicationMovie>>(result);
     }
 
-    public virtual async Task<ApplicationMovie> GetMovieById(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<ApplicationMovie> GetMovieById(
+        Guid id,
+        CancellationToken cancellationToken
+    )
     {
-        var result = await this.context.Movies
-            .Where(r => r.Id == id)
+        var result = await this
+            .context.Movies.Where(r => r.Id == id)
             .Include(m => m.Reviews)
-            .ThenInclude(r => r.ReviewAuthor)
+                .ThenInclude(r => r.ReviewAuthor)
             .AsNoTracking()
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -97,7 +112,9 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
 
     public virtual async Task<bool> MovieExists(Guid id, CancellationToken cancellationToken)
     {
-        return await this.context.Movies.AsNoTracking().AnyAsync(m => m.Id == id, cancellationToken);
+        return await this
+            .context.Movies.AsNoTracking()
+            .AnyAsync(m => m.Id == id, cancellationToken);
     }
 
     #endregion Movies
@@ -108,7 +125,8 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
         Guid authorId,
         Guid movieId,
         int stars,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         var review = new Review
         {
@@ -116,15 +134,15 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
             ReviewedMovieId = movieId,
             Stars = stars,
             DateCreated = this.timeProvider.GetUtcNow().UtcDateTime,
-            DateModified = this.timeProvider.GetUtcNow().UtcDateTime
+            DateModified = this.timeProvider.GetUtcNow().UtcDateTime,
         };
 
         var id = this.context.Add(review).Entity.Id;
 
         _ = await this.context.SaveChangesAsync(cancellationToken);
 
-        var result = await this.context.Reviews
-            .Where(r => r.Id == id)
+        var result = await this
+            .context.Reviews.Where(r => r.Id == id)
             .Include(r => r.ReviewAuthor)
             .Include(r => r.ReviewedMovie)
             .AsNoTracking()
@@ -150,8 +168,8 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
 
     public async Task<List<ApplicationReview>> GetReviews(CancellationToken cancellationToken)
     {
-        var result = await this.context.Reviews
-            .Include(r => r.ReviewAuthor)
+        var result = await this
+            .context.Reviews.Include(r => r.ReviewAuthor)
             .Include(r => r.ReviewedMovie)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
@@ -161,8 +179,8 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
 
     public async Task<ApplicationReview> GetReviewById(Guid id, CancellationToken cancellationToken)
     {
-        var result = await this.context.Reviews
-            .Where(r => r.Id == id)
+        var result = await this
+            .context.Reviews.Where(r => r.Id == id)
             .Include(r => r.ReviewAuthor)
             .Include(r => r.ReviewedMovie)
             .AsNoTracking()
@@ -181,7 +199,8 @@ internal class EntityFrameworkMovieReviewsRepository : IAuthorsRepository, IMovi
         Guid authorId,
         Guid movieId,
         int stars,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         try
         {

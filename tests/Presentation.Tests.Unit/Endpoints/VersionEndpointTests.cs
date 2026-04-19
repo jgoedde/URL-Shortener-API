@@ -20,11 +20,11 @@ public class VersionEndpointTests
         // Arrange
         var sender = Substitute.For<ISender>();
 
-        _ = sender.Send(Arg.Any<Queries.GetVersion.GetVersionQuery>()).ReturnsForAnyArgs(new Entities.Version
-        {
-            FileVersion = "1.2.3.4",
-            InformationalVersion = "5.6.7.8"
-        });
+        _ = sender
+            .Send(Arg.Any<Queries.GetVersion.GetVersionQuery>())
+            .ReturnsForAnyArgs(
+                new Entities.Version { FileVersion = "1.2.3.4", InformationalVersion = "5.6.7.8" }
+            );
 
         // Act
         var response = await VersionEndpoints.GetVersion(sender);

@@ -11,8 +11,7 @@ public static class VersionEndpoints
 {
     public static WebApplication MapVersionEndpoints(this WebApplication app)
     {
-        var root = app.MapGroup("/api/version")
-            .WithTags("version");
+        var root = app.MapGroup("/api/version").WithTags("version");
 
         _ = root.MapGet("/", GetVersion)
             .Produces<Entities.Version>()
@@ -23,7 +22,9 @@ public static class VersionEndpoints
         return app;
     }
 
-    public static async Task<Results<Ok<Entities.Version>, ProblemHttpResult>> GetVersion(ISender sender)
+    public static async Task<Results<Ok<Entities.Version>, ProblemHttpResult>> GetVersion(
+        ISender sender
+    )
     {
         try
         {
@@ -31,7 +32,11 @@ public static class VersionEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 }

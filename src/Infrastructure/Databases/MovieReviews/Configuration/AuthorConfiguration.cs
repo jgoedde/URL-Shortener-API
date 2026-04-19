@@ -9,6 +9,9 @@ internal class AuthorConfiguration : EntityConfiguration<Author>
     {
         base.Configure(builder);
 
-        _ = builder.HasMany(m => m.Reviews).WithOne(r => r.ReviewAuthor).HasForeignKey(r => r.ReviewAuthorId);
+        _ = builder
+            .HasMany(m => m.Reviews)
+            .WithOne(r => r.ReviewAuthor)
+            .HasForeignKey(r => r.ReviewAuthorId);
     }
 }

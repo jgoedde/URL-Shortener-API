@@ -1,13 +1,13 @@
 namespace UrlShortener.Presentation.Endpoints;
 
-using UrlShortener.Application.Common.Exceptions;
-using UrlShortener.Presentation.Filters;
-using UrlShortener.Presentation.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using UrlShortener.Application.Common.Exceptions;
+using UrlShortener.Presentation.Filters;
+using UrlShortener.Presentation.Requests;
 using Commands = Application.Reviews.Commands;
 using Entities = Application.Reviews.Entities;
 using Queries = Application.Reviews.Queries;
@@ -41,7 +41,9 @@ public static class ReviewEndpoints
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .ProducesValidationProblem()
             .WithSummary("Create a Review")
-            .WithDescription("\n    POST /review\n     {         \"authorId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"movieId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"stars\": 5       }");
+            .WithDescription(
+                "\n    POST /review\n     {         \"authorId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"movieId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"stars\": 5       }"
+            );
 
         _ = root.MapDelete("/{id}", DeleteReview)
             .Produces(StatusCodes.Status204NoContent)
@@ -59,12 +61,16 @@ public static class ReviewEndpoints
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .ProducesValidationProblem()
             .WithSummary("Update a Review")
-            .WithDescription("\n    PUT /review/00000000-0000-0000-0000-000000000000\n     {         \"authorId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"movieId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"stars\": 5       }");
+            .WithDescription(
+                "\n    PUT /review/00000000-0000-0000-0000-000000000000\n     {         \"authorId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"movieId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",         \"stars\": 5       }"
+            );
 
         return app;
     }
 
-    public static async Task<Results<Ok<List<Entities.Review>>, ProblemHttpResult>> GetReviews([FromServices] ISender sender)
+    public static async Task<Results<Ok<List<Entities.Review>>, ProblemHttpResult>> GetReviews(
+        [FromServices] ISender sender
+    )
     {
         try
         {
@@ -72,18 +78,23 @@ public static class ReviewEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 
-    public static async Task<Results<Ok<Entities.Review>, NotFound<string>, ProblemHttpResult>> GetReviewById([Validate][FromRoute] Guid id, [FromServices] ISender sender)
+    public static async Task<
+        Results<Ok<Entities.Review>, NotFound<string>, ProblemHttpResult>
+    > GetReviewById([Validate] [FromRoute] Guid id, [FromServices] ISender sender)
     {
         try
         {
-            return TypedResults.Ok(await sender.Send(new Queries.GetReviewById.GetReviewByIdQuery
-            {
-                Id = id
-            }));
+            return TypedResults.Ok(
+                await sender.Send(new Queries.GetReviewById.GetReviewByIdQuery { Id = id })
+            );
         }
         catch (NotFoundException ex)
         {
@@ -91,20 +102,28 @@ public static class ReviewEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 
-    public static async Task<Results<Created<Entities.Review>, NotFound<string>, ProblemHttpResult>> CreateReview([Validate][FromBody] CreateReviewRequest request, [FromServices] ISender sender)
+    public static async Task<
+        Results<Created<Entities.Review>, NotFound<string>, ProblemHttpResult>
+    > CreateReview([Validate] [FromBody] CreateReviewRequest request, [FromServices] ISender sender)
     {
         try
         {
-            var response = await sender.Send(new Commands.CreateReview.CreateReviewCommand
-            {
-                AuthorId = request.AuthorId,
-                MovieId = request.MovieId,
-                Stars = request.Stars
-            });
+            var response = await sender.Send(
+                new Commands.CreateReview.CreateReviewCommand
+                {
+                    AuthorId = request.AuthorId,
+                    MovieId = request.MovieId,
+                    Stars = request.Stars,
+                }
+            );
 
             return TypedResults.Created($"/api/review/{response.Id}", response);
         }
@@ -114,21 +133,31 @@ public static class ReviewEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 
-    public static async Task<Results<NoContent, NotFound<string>, ProblemHttpResult>> UpdateReview([Validate][FromRoute] Guid id, [Validate][FromBody] UpdateReviewRequest request, [FromServices] ISender sender)
+    public static async Task<Results<NoContent, NotFound<string>, ProblemHttpResult>> UpdateReview(
+        [Validate] [FromRoute] Guid id,
+        [Validate] [FromBody] UpdateReviewRequest request,
+        [FromServices] ISender sender
+    )
     {
         try
         {
-            _ = await sender.Send(new Commands.UpdateReview.UpdateReviewCommand
-            {
-                Id = id,
-                AuthorId = request.AuthorId,
-                MovieId = request.MovieId,
-                Stars = request.Stars
-            });
+            _ = await sender.Send(
+                new Commands.UpdateReview.UpdateReviewCommand
+                {
+                    Id = id,
+                    AuthorId = request.AuthorId,
+                    MovieId = request.MovieId,
+                    Stars = request.Stars,
+                }
+            );
 
             return TypedResults.NoContent();
         }
@@ -138,18 +167,22 @@ public static class ReviewEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 
-    public static async Task<Results<NoContent, NotFound<string>, ProblemHttpResult>> DeleteReview([Validate][FromRoute] Guid id, [FromServices] ISender sender)
+    public static async Task<Results<NoContent, NotFound<string>, ProblemHttpResult>> DeleteReview(
+        [Validate] [FromRoute] Guid id,
+        [FromServices] ISender sender
+    )
     {
         try
         {
-            _ = await sender.Send(new Commands.DeleteReview.DeleteReviewCommand
-            {
-                Id = id,
-            });
+            _ = await sender.Send(new Commands.DeleteReview.DeleteReviewCommand { Id = id });
 
             return TypedResults.NoContent();
         }
@@ -159,7 +192,11 @@ public static class ReviewEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(
+                ex.StackTrace,
+                ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
         }
     }
 }

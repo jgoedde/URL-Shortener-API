@@ -16,7 +16,8 @@ using Requests;
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     PropertyNameCaseInsensitive = true,
     WriteIndented = false,
-    GenerationMode = JsonSourceGenerationMode.Default)]
+    GenerationMode = JsonSourceGenerationMode.Default
+)]
 [JsonSerializable(typeof(Author))]
 [JsonSerializable(typeof(List<Author>))]
 [JsonSerializable(typeof(Movie))]
@@ -29,6 +30,4 @@ using Requests;
 [JsonSerializable(typeof(List<Version>))]
 [JsonSerializable(typeof(CreateReviewRequest))]
 [JsonSerializable(typeof(UpdateReviewRequest))]
-public partial class AppJsonSerializerContext : JsonSerializerContext
-{
-}
+public partial class AppJsonSerializerContext : JsonSerializerContext { }

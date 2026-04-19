@@ -6,7 +6,8 @@ using Common.Enums;
 using Common.Exceptions;
 using MediatR;
 
-public class DeleteReviewHandler(IReviewsRepository repository) : IRequestHandler<DeleteReviewCommand, bool>
+public class DeleteReviewHandler(IReviewsRepository repository)
+    : IRequestHandler<DeleteReviewCommand, bool>
 {
     public async Task<bool> Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
     {

@@ -17,7 +17,7 @@ public class GetVersionHandler : IRequestHandler<GetVersionQuery, Version>
             FileVersion =
                 $"{assembly?.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version}",
             InformationalVersion =
-                $"{assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}"
+                $"{assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}",
         };
 
         return Task.FromResult(version);

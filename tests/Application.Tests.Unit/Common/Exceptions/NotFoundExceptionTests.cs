@@ -1,9 +1,9 @@
 namespace UrlShortener.Application.Tests.Unit.Common.Exceptions;
 
 using Application.Authors.Entities;
+using Shouldly;
 using UrlShortener.Application.Common.Enums;
 using UrlShortener.Application.Common.Exceptions;
-using Shouldly;
 using Xunit;
 
 public class NotFoundExceptionTests

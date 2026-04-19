@@ -1,13 +1,9 @@
-using UrlShortener.Presentation.Extensions;
 using Serilog;
+using UrlShortener.Presentation.Extensions;
 
-var builder = WebApplication
-    .CreateBuilder(args)
-    .ConfigureApplicationBuilder();
+var builder = WebApplication.CreateBuilder(args).ConfigureApplicationBuilder();
 
-var app = builder
-    .Build()
-    .ConfigureApplication();
+var app = builder.Build().ConfigureApplication();
 
 try
 {

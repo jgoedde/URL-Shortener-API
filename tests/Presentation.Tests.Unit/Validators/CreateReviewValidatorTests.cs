@@ -22,7 +22,7 @@ public class CreateReviewValidatorTests
         {
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
-            Stars = stars
+            Stars = stars,
         };
 
         // Act
@@ -42,14 +42,15 @@ public class CreateReviewValidatorTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.NewGuid(),
-            Stars = 5
+            Stars = 5,
         };
 
         // Act
         var result = Validator.TestValidate(command);
 
         // Assert
-        _ = result.ShouldHaveValidationErrorFor(command => command.AuthorId)
+        _ = result
+            .ShouldHaveValidationErrorFor(command => command.AuthorId)
             .WithErrorMessage("An author id was not supplied to create the review.");
 
         result.ShouldNotHaveValidationErrorFor(request => request.MovieId);
@@ -64,14 +65,15 @@ public class CreateReviewValidatorTests
         {
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         // Act
         var result = Validator.TestValidate(command);
 
         // Assert
-        _ = result.ShouldHaveValidationErrorFor(command => command.MovieId)
+        _ = result
+            .ShouldHaveValidationErrorFor(command => command.MovieId)
             .WithErrorMessage("A movie id was not supplied to create the review.");
 
         result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
@@ -91,14 +93,15 @@ public class CreateReviewValidatorTests
         {
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
-            Stars = stars
+            Stars = stars,
         };
 
         // Act
         var result = Validator.TestValidate(command);
 
         // Assert
-        _ = result.ShouldHaveValidationErrorFor(command => command.Stars)
+        _ = result
+            .ShouldHaveValidationErrorFor(command => command.Stars)
             .WithErrorMessage("A star rating must be between 1 and 5.");
 
         result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);

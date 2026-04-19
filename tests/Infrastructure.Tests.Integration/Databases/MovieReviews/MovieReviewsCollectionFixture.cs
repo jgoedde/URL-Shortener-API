@@ -36,16 +36,18 @@ public class MovieReviewsDataFixture : IDisposable
         this.TimeProvider.SetUtcNow(new DateTime(2009, 12, 31, 23, 51, 01));
 
         this.Mapper = new MapperConfiguration(cfg =>
-            cfg
-                .AddProfiles(
-                [
-                    new AuthorMappingProfile(),
-                    new MovieMappingProfile(),
-                    new ReviewMappingProfile()
-                ]))
-                .CreateMapper();
+            cfg.AddProfiles([
+                new AuthorMappingProfile(),
+                new MovieMappingProfile(),
+                new ReviewMappingProfile(),
+            ])
+        ).CreateMapper();
 
-        this.Repository = new EntityFrameworkMovieReviewsRepository(this.Context, this.TimeProvider, this.Mapper);
+        this.Repository = new EntityFrameworkMovieReviewsRepository(
+            this.Context,
+            this.TimeProvider,
+            this.Mapper
+        );
 
         _ = this.Context.Database.EnsureDeleted();
         _ = this.Context.Database.EnsureCreated();

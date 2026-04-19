@@ -7,9 +7,13 @@ using Common.Exceptions;
 using Entities;
 using MediatR;
 
-public class GetAuthorByIdHandler(IAuthorsRepository repository) : IRequestHandler<GetAuthorByIdQuery, Author>
+public class GetAuthorByIdHandler(IAuthorsRepository repository)
+    : IRequestHandler<GetAuthorByIdQuery, Author>
 {
-    public async Task<Author> Handle(GetAuthorByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Author> Handle(
+        GetAuthorByIdQuery request,
+        CancellationToken cancellationToken
+    )
     {
         var result = await repository.GetAuthorById(request.Id, cancellationToken);
 

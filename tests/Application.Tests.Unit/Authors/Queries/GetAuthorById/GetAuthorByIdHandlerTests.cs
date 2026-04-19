@@ -16,16 +16,15 @@ public class GetAuthorByIdHandlerTests
     public async Task Handle_ShouldPassThrough_Query()
     {
         // Arrange
-        var query = new GetAuthorByIdQuery
-        {
-            Id = Guid.Empty
-        };
+        var query = new GetAuthorByIdQuery { Id = Guid.Empty };
 
         var context = Substitute.For<IAuthorsRepository>();
         var handler = new GetAuthorByIdHandler(context);
         var token = new CancellationTokenSource().Token;
 
-        _ = context.GetAuthorById(Arg.Any<Guid>(), token).Returns(new Author(Guid.Empty, "FirstName", "LastName"));
+        _ = context
+            .GetAuthorById(Arg.Any<Guid>(), token)
+            .Returns(new Author(Guid.Empty, "FirstName", "LastName"));
 
         // Act
         var result = await handler.Handle(query, token);
@@ -42,22 +41,20 @@ public class GetAuthorByIdHandlerTests
         result.Reviews.ShouldBeNull();
     }
 
-
     [Fact]
     public async Task Handle_ShouldThrowException_DoesNotExist()
     {
         // Arrange
-        var query = new GetAuthorByIdQuery
-        {
-            Id = Guid.Empty
-        };
+        var query = new GetAuthorByIdQuery { Id = Guid.Empty };
 
         var context = Substitute.For<IAuthorsRepository>();
         var handler = new GetAuthorByIdHandler(context);
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(query, token));
+        var exception = Should.Throw<NotFoundException>(async () =>
+            await handler.Handle(query, token)
+        );
 
         // Assert
         _ = await context.Received(1).GetAuthorById(query.Id, token);

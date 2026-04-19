@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
 
 internal abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T>
-        where T : Entity
+    where T : Entity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {

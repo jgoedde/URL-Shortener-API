@@ -9,7 +9,8 @@ public interface IReviewsRepository
         Guid authorId,
         Guid movieId,
         int stars,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 
     public Task<bool> DeleteReview(Guid id, CancellationToken cancellationToken);
 
@@ -24,5 +25,6 @@ public interface IReviewsRepository
         Guid authorId,
         Guid movieId,
         int stars,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken
+    );
 }

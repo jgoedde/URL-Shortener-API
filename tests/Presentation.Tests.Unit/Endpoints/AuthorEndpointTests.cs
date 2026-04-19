@@ -1,15 +1,15 @@
 namespace UrlShortener.Presentation.Tests.Unit.Endpoints;
 
 using System.Threading.Tasks;
-using UrlShortener.Application.Common.Exceptions;
-using UrlShortener.Application.Reviews.Entities;
-using UrlShortener.Presentation.Endpoints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Shouldly;
+using UrlShortener.Application.Common.Exceptions;
+using UrlShortener.Application.Reviews.Entities;
+using UrlShortener.Presentation.Endpoints;
 using Xunit;
 using Entities = Application.Authors.Entities;
 using Queries = Application.Authors.Queries;
@@ -24,10 +24,7 @@ public class AuthorEndpointTests
 
         _ = sender
             .Send(Arg.Any<Queries.GetAuthors.GetAuthorsQuery>())
-            .ReturnsForAnyArgs(
-            [
-                new Entities.Author(Guid.Empty, "Lorem", "Ipsum")
-            ]);
+            .ReturnsForAnyArgs([new Entities.Author(Guid.Empty, "Lorem", "Ipsum")]);
 
         // Act
         var response = await AuthorEndpoints.GetAuthors(sender);

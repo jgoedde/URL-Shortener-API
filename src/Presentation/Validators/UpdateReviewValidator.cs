@@ -1,14 +1,20 @@
 namespace UrlShortener.Presentation.Validators;
 
-using UrlShortener.Presentation.Requests;
 using FluentValidation;
+using UrlShortener.Presentation.Requests;
 
 public class UpdateReviewValidator : AbstractValidator<UpdateReviewRequest>
 {
     public UpdateReviewValidator()
     {
-        _ = this.RuleFor(r => r.AuthorId).NotEqual(Guid.Empty).WithMessage("An author id was not supplied to Update the review.");
-        _ = this.RuleFor(r => r.MovieId).NotEqual(Guid.Empty).WithMessage("A movie id was not supplied to Update the review.");
-        _ = this.RuleFor(r => r.Stars).InclusiveBetween(1, 5).WithMessage("A star rating must be between 1 and 5.");
+        _ = this.RuleFor(r => r.AuthorId)
+            .NotEqual(Guid.Empty)
+            .WithMessage("An author id was not supplied to Update the review.");
+        _ = this.RuleFor(r => r.MovieId)
+            .NotEqual(Guid.Empty)
+            .WithMessage("A movie id was not supplied to Update the review.");
+        _ = this.RuleFor(r => r.Stars)
+            .InclusiveBetween(1, 5)
+            .WithMessage("A star rating must be between 1 and 5.");
     }
 }

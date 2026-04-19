@@ -4,7 +4,8 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-internal class MovieReviewsDbContext(DbContextOptions<MovieReviewsDbContext> options) : DbContext(options)
+internal class MovieReviewsDbContext(DbContextOptions<MovieReviewsDbContext> options)
+    : DbContext(options)
 {
     public DbSet<Author> Authors { get; set; }
     public DbSet<Movie> Movies { get; set; }

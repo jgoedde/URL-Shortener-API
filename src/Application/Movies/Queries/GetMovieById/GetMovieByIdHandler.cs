@@ -7,7 +7,8 @@ using Common.Exceptions;
 using Entities;
 using MediatR;
 
-public class GetMovieByIdHandler(IMoviesRepository repository) : IRequestHandler<GetMovieByIdQuery, Movie>
+public class GetMovieByIdHandler(IMoviesRepository repository)
+    : IRequestHandler<GetMovieByIdQuery, Movie>
 {
     public async Task<Movie> Handle(GetMovieByIdQuery request, CancellationToken cancellationToken)
     {

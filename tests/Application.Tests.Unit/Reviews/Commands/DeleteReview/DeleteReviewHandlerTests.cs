@@ -44,7 +44,9 @@ public class DeleteReviewHandlerTests
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(command, token));
+        var exception = Should.Throw<NotFoundException>(async () =>
+            await handler.Handle(command, token)
+        );
 
         // Assert
         exception.Message.ShouldBe("The Review with the supplied id was not found.");

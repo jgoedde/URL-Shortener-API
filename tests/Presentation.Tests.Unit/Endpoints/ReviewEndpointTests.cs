@@ -1,16 +1,16 @@
 namespace UrlShortener.Presentation.Tests.Unit.Endpoints;
 
 using System.Threading.Tasks;
-using UrlShortener.Application.Authors.Entities;
-using UrlShortener.Application.Common.Exceptions;
-using UrlShortener.Application.Movies.Entities;
-using UrlShortener.Presentation.Endpoints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Shouldly;
+using UrlShortener.Application.Authors.Entities;
+using UrlShortener.Application.Common.Exceptions;
+using UrlShortener.Application.Movies.Entities;
+using UrlShortener.Presentation.Endpoints;
 using Xunit;
 using Commands = Application.Reviews.Commands;
 using Entities = Application.Reviews.Entities;
@@ -26,14 +26,13 @@ public class ReviewEndpointTests
 
         _ = sender
             .Send(Arg.Any<Queries.GetReviews.GetReviewsQuery>())
-            .ReturnsForAnyArgs(
-            [
+            .ReturnsForAnyArgs([
                 new Entities.Review(
                     Guid.Empty,
                     5,
                     new ReviewedMovie(Guid.Empty, "Lorem Ipsum"),
                     new ReviewAuthor(Guid.Empty, "Lorem", "Ipsum")
-                )
+                ),
             ]);
 
         // Act
@@ -96,12 +95,14 @@ public class ReviewEndpointTests
 
         _ = sender
             .Send(Arg.Any<Queries.GetReviewById.GetReviewByIdQuery>())
-            .ReturnsForAnyArgs(new Entities.Review(
-                Guid.Empty,
-                5,
-                new ReviewedMovie(Guid.Empty, "Lorem Ipsum"),
-                new ReviewAuthor(Guid.Empty, "Lorem", "Ipsum")
-            ));
+            .ReturnsForAnyArgs(
+                new Entities.Review(
+                    Guid.Empty,
+                    5,
+                    new ReviewedMovie(Guid.Empty, "Lorem Ipsum"),
+                    new ReviewAuthor(Guid.Empty, "Lorem", "Ipsum")
+                )
+            );
 
         // Act
         var response = await ReviewEndpoints.GetReviewById(Guid.Empty, sender);
@@ -185,17 +186,19 @@ public class ReviewEndpointTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         _ = sender
             .Send(Arg.Any<Commands.CreateReview.CreateReviewCommand>())
-            .ReturnsForAnyArgs(new Entities.Review(
-                Guid.Empty,
-                5,
-                new ReviewedMovie(Guid.Empty, "Lorem Ipsum"),
-                new ReviewAuthor(Guid.Empty, "Lorem", "Ipsum")
-            ));
+            .ReturnsForAnyArgs(
+                new Entities.Review(
+                    Guid.Empty,
+                    5,
+                    new ReviewedMovie(Guid.Empty, "Lorem Ipsum"),
+                    new ReviewAuthor(Guid.Empty, "Lorem", "Ipsum")
+                )
+            );
 
         // Act
         var response = await ReviewEndpoints.CreateReview(request, sender);
@@ -235,7 +238,7 @@ public class ReviewEndpointTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         _ = sender
@@ -262,7 +265,7 @@ public class ReviewEndpointTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         _ = sender
@@ -292,7 +295,7 @@ public class ReviewEndpointTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         _ = sender
@@ -317,7 +320,7 @@ public class ReviewEndpointTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         _ = sender
@@ -343,7 +346,7 @@ public class ReviewEndpointTests
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.Empty,
-            Stars = 5
+            Stars = 5,
         };
 
         _ = sender

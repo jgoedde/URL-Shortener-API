@@ -12,9 +12,13 @@ using Movies;
 public class CreateReviewHandler(
     IAuthorsRepository authorsRepository,
     IMoviesRepository moviesRepository,
-    IReviewsRepository reviewsRepository) : IRequestHandler<CreateReviewCommand, Review>
+    IReviewsRepository reviewsRepository
+) : IRequestHandler<CreateReviewCommand, Review>
 {
-    public async Task<Review> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
+    public async Task<Review> Handle(
+        CreateReviewCommand request,
+        CancellationToken cancellationToken
+    )
     {
         if (!await authorsRepository.AuthorExists(request.AuthorId, cancellationToken))
         {
@@ -26,7 +30,11 @@ public class CreateReviewHandler(
             NotFoundException.Throw(EntityType.Movie);
         }
 
-        return await reviewsRepository
-            .CreateReview(request.AuthorId, request.MovieId, request.Stars, cancellationToken);
+        return await reviewsRepository.CreateReview(
+            request.AuthorId,
+            request.MovieId,
+            request.Stars,
+            cancellationToken
+        );
     }
 }

@@ -26,8 +26,9 @@ public class AuthorEndpointTests : IDisposable
 
         // Act
         using var response = await client.GetAsync("/api/author");
-        var result = (await response.Content.ReadAsStringAsync())
-            .Deserialize<List<Entities.Author>>();
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<
+            List<Entities.Author>
+        >();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -64,8 +65,9 @@ public class AuthorEndpointTests : IDisposable
         // Arrange
         using var client = this.application.CreateClient();
         using var authorResponse = await client.GetAsync("/api/author");
-        var authorResult = (await authorResponse.Content.ReadAsStringAsync())
-            .Deserialize<List<Entities.Author>>()[0];
+        var authorResult = (await authorResponse.Content.ReadAsStringAsync()).Deserialize<
+            List<Entities.Author>
+        >()[0];
 
         // Act
         using var response = await client.GetAsync($"/api/author/{authorResult.Id}");
@@ -105,7 +107,9 @@ public class AuthorEndpointTests : IDisposable
 
         // Act
         using var response = await client.GetAsync($"/api/author/{input}");
-        var result = (await response.Content.ReadAsStringAsync()).Deserialize<ValidationProblemDetails>();
+        var result = (
+            await response.Content.ReadAsStringAsync()
+        ).Deserialize<ValidationProblemDetails>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);

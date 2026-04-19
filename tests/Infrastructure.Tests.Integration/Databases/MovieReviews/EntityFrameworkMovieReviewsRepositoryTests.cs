@@ -8,7 +8,6 @@ using Xunit;
 [Collection("MovieReviews")]
 public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture fixture)
 {
-
     #region Authors
 
     [Fact]
@@ -25,7 +24,6 @@ public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture 
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(3);
     }
-
 
     [Fact]
     public async Task GetAuthorById_ShouldReturn_Author()
@@ -109,7 +107,6 @@ public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture 
         result.Count.ShouldBe(3);
     }
 
-
     [Fact]
     public async Task GetMovieById_ShouldReturn_Movie()
     {
@@ -184,12 +181,17 @@ public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture 
         {
             AuthorId = fixture.Context.Authors.FirstOrDefault(a => a.FirstName == "One").Id,
             MovieId = fixture.Context.Movies.FirstOrDefault(m => m.Title == "One").Id,
-            Stars = 5
+            Stars = 5,
         };
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var result = await fixture.Repository.CreateReview(review.AuthorId, review.MovieId, review.Stars, token);
+        var result = await fixture.Repository.CreateReview(
+            review.AuthorId,
+            review.MovieId,
+            review.Stars,
+            token
+        );
 
         // Assert
         _ = result.ShouldNotBeNull();
@@ -248,7 +250,6 @@ public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture 
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(9);
     }
-
 
     [Fact]
     public async Task GetReviewById_ShouldReturn_Review()
@@ -326,12 +327,18 @@ public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture 
             Id = fixture.Context.Reviews.FirstOrDefault(a => a.Stars == 2).Id,
             AuthorId = fixture.Context.Authors.FirstOrDefault(a => a.FirstName == "Two").Id,
             MovieId = fixture.Context.Movies.FirstOrDefault(m => m.Title == "Two").Id,
-            Stars = 4
+            Stars = 4,
         };
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var result = await fixture.Repository.UpdateReview(review.Id, review.AuthorId, review.MovieId, review.Stars, token);
+        var result = await fixture.Repository.UpdateReview(
+            review.Id,
+            review.AuthorId,
+            review.MovieId,
+            review.Stars,
+            token
+        );
 
         // Assert
         result.ShouldBeTrue();
@@ -354,12 +361,18 @@ public class EntityFrameworkMovieReviewsRepositoryTests(MovieReviewsDataFixture 
             Id = Guid.Empty,
             AuthorId = fixture.Context.Authors.FirstOrDefault(a => a.FirstName == "One").Id,
             MovieId = fixture.Context.Movies.FirstOrDefault(m => m.Title == "One").Id,
-            Stars = 5
+            Stars = 5,
         };
         var token = new CancellationTokenSource().Token;
 
         // Act
-        var result = await fixture.Repository.UpdateReview(review.Id, review.AuthorId, review.MovieId, review.Stars, token);
+        var result = await fixture.Repository.UpdateReview(
+            review.Id,
+            review.AuthorId,
+            review.MovieId,
+            review.Stars,
+            token
+        );
 
         // Assert
         result.ShouldBeFalse();
