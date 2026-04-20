@@ -17,7 +17,9 @@ public static class RedirectEndpoint
                 {
                     try
                     {
-                        var url = await sender.Send(new GetOriginalUrlQuery { ShortCode = shortCode });
+                        var url = await sender.Send(
+                            new GetOriginalUrlQuery { ShortCode = shortCode }
+                        );
                         return Results.Redirect(url); // 302
                     }
                     catch (NotFoundException ex)
@@ -32,7 +34,6 @@ public static class RedirectEndpoint
                             StatusCodes.Status500InternalServerError
                         );
                     }
-
                 }
             )
             .AddEndpointFilterFactory(ValidationFilter.ValidationFilterFactory)

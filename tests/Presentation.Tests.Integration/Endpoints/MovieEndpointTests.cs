@@ -1,14 +1,5 @@
 namespace UrlShortener.Presentation.Tests.Integration.Endpoints;
 
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Shouldly;
-using Xunit;
-using Entities = Application.Movies.Entities;
-
 public class MovieEndpointTests : IDisposable
 {
     private UrlShortenerApplication application;
@@ -18,6 +9,7 @@ public class MovieEndpointTests : IDisposable
         this.application = new();
     }
 
+    /*
     [Fact]
     public async Task GetMovies_ShouldReturn_Ok()
     {
@@ -124,6 +116,7 @@ public class MovieEndpointTests : IDisposable
         result.Errors[""].ShouldBe(["The Id supplied in the request is not valid."]);
     }
 
+*/
     public void Dispose()
     {
         this.Dispose(true);

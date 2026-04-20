@@ -1,12 +1,10 @@
 namespace UrlShortener.Infrastructure;
 
-using System;
-using Application.Authors;
-using Application.Movies;
-using Application.Reviews;
-using Application.Urls;
+using Application;
 using Databases.UrlShortener;
+using Databases.UrlShortener.Interceptors;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,26 +15,21 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        _ = services.AddDbContext<ApplicationDbContext>(opt =>
-            opt.UseNpgsql(configuration.GetConnectionString("Default"))
+        _ = services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+
+        _ = services.AddDbContext<ApplicationDbContext>(
+            (sp, opt) =>
+            {
+                opt.UseNpgsql(configuration.GetConnectionString("Default"));
+                opt.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            }
+        );
+
+        _ = services.AddScoped<IApplicationDbContext>(provider =>
+            provider.GetRequiredService<ApplicationDbContext>()
         );
 
         _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-        _ = services.AddScoped<EntityFrameworkDefaultRepository>();
-
-        _ = services.AddScoped<IAuthorsRepository>(p =>
-            p.GetRequiredService<EntityFrameworkDefaultRepository>()
-        );
-        _ = services.AddScoped<IMoviesRepository>(x =>
-            x.GetRequiredService<EntityFrameworkDefaultRepository>()
-        );
-        _ = services.AddScoped<IReviewsRepository>(x =>
-            x.GetRequiredService<EntityFrameworkDefaultRepository>()
-        );
-        _ = services.AddScoped<IUrlsRepository>(x =>
-            x.GetRequiredService<EntityFrameworkDefaultRepository>()
-        );
 
         _ = services.AddSingleton(TimeProvider.System);
 

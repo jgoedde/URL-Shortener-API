@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
 
-internal abstract class EntityConfiguration<T, TId> : IEntityTypeConfiguration<T>
-    where T : Entity<TId>
+internal abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T>
+    where T : BaseAuditableEntity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
         _ = builder.HasKey(e => e.Id);
         _ = builder.Property(m => m.Id).ValueGeneratedOnAdd().IsRequired();
-        _ = builder.Property(m => m.DateCreated).ValueGeneratedOnAdd().IsRequired();
-        _ = builder.Property(m => m.DateModified).ValueGeneratedOnAdd().IsRequired();
+        _ = builder.Property(m => m.Created).ValueGeneratedOnAdd().IsRequired();
+        _ = builder.Property(m => m.LastModified).ValueGeneratedOnAdd().IsRequired();
     }
 }

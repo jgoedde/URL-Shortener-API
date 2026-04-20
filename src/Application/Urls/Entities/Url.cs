@@ -1,3 +1,10 @@
 namespace UrlShortener.Application.Urls.Entities;
 
-public record Url(int Id, string OriginalUrl, string ShortCode);
+using Infrastructure.Databases.UrlShortener.Models;
+
+public class Url : BaseAuditableEntity
+{
+    public string ShortCode { get; set; }
+
+    public string OriginalUrl { get; init; }
+}

@@ -1,9 +1,7 @@
 namespace UrlShortener.Presentation.Serialization;
 
 using System.Text.Json.Serialization;
-using Application.Authors.Entities;
-using Application.Movies.Entities;
-using Application.Reviews.Entities;
+using Application.Urls.Entities;
 using Application.Versions.Entities;
 using Requests;
 
@@ -18,16 +16,8 @@ using Requests;
     WriteIndented = false,
     GenerationMode = JsonSourceGenerationMode.Default
 )]
-[JsonSerializable(typeof(Author))]
-[JsonSerializable(typeof(List<Author>))]
-[JsonSerializable(typeof(Movie))]
-[JsonSerializable(typeof(List<Movie>))]
-[JsonSerializable(typeof(Review))]
-[JsonSerializable(typeof(List<Review>))]
-[JsonSerializable(typeof(ReviewAuthor))]
-[JsonSerializable(typeof(ReviewedMovie))]
 [JsonSerializable(typeof(Version))]
+[JsonSerializable(typeof(Url))]
 [JsonSerializable(typeof(List<Version>))]
-[JsonSerializable(typeof(CreateReviewRequest))]
-[JsonSerializable(typeof(UpdateReviewRequest))]
+[JsonSerializable(typeof(ShortenUrlRequest))]
 public partial class AppJsonSerializerContext : JsonSerializerContext { }

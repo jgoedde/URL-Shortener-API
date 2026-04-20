@@ -3,8 +3,9 @@ namespace UrlShortener.Application.Urls.Queries.GetOriginalUrl;
 using Common.Enums;
 using Common.Exceptions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-public class GetOriginalUrlHandler(IUrlsRepository urlsRepository)
+public class GetOriginalUrlHandler(IApplicationDbContext dbContext)
     : IRequestHandler<GetOriginalUrlQuery, string>
 {
     // TODO: Add caching
@@ -13,7 +14,10 @@ public class GetOriginalUrlHandler(IUrlsRepository urlsRepository)
         CancellationToken cancellationToken
     )
     {
-        var url = await urlsRepository.GetByShortCode(request.ShortCode, cancellationToken);
+        var url = await dbContext
+            .Urls.AsNoTracking()
+            .Where(it => it.ShortCode == request.ShortCode)
+            .FirstOrDefaultAsync(cancellationToken);
 
         NotFoundException.ThrowIfNull(url, EntityType.Url);
 

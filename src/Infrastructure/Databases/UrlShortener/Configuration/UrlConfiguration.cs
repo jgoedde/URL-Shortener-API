@@ -1,5 +1,5 @@
 namespace UrlShortener.Infrastructure.Databases.UrlShortener.Configuration;
 
-using Models;
+using Application.Urls.Entities;
 
-internal class UrlConfiguration : EntityConfiguration<Url, int>;
+internal class UrlConfiguration : EntityConfiguration<Url>;

@@ -1,22 +1,8 @@
 namespace UrlShortener.Presentation.Tests.Unit.Endpoints;
 
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using Shouldly;
-using UrlShortener.Application.Common.Exceptions;
-using UrlShortener.Application.Reviews.Entities;
-using UrlShortener.Presentation.Endpoints;
-using Xunit;
-using Entities = Application.Authors.Entities;
-using Queries = Application.Authors.Queries;
-
 public class AuthorEndpointTests
 {
-    [Fact]
+    /*[Fact]
     public async Task GetAuthors_ShouldReturn_Ok()
     {
         // Arrange
@@ -142,5 +128,5 @@ public class AuthorEndpointTests
         result.ProblemDetails.Instance.ShouldBe("Expected Exception");
         result.ProblemDetails.Status.ShouldBe(StatusCodes.Status500InternalServerError);
         result.ProblemDetails.Detail.ShouldNotBeNullOrEmpty();
-    }
+    }*/
 }

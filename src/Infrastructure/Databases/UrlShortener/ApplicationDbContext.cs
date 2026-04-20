@@ -1,19 +1,15 @@
 namespace UrlShortener.Infrastructure.Databases.UrlShortener;
 
 using System.Reflection;
+using Application;
+using Application.Urls.Entities;
 using Microsoft.EntityFrameworkCore;
-using Models;
 
 internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : DbContext(options)
+    : DbContext(options),
+        IApplicationDbContext
 {
-    public DbSet<Author> Authors { get; set; }
-
-    public DbSet<Movie> Movies { get; set; }
-
-    public DbSet<Review> Reviews { get; set; }
-
-    public DbSet<Url> Urls { get; set; }
+    public DbSet<Url> Urls => this.Set<Url>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

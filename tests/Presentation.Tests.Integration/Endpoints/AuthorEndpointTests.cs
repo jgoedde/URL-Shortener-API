@@ -1,14 +1,5 @@
 namespace UrlShortener.Presentation.Tests.Integration.Endpoints;
 
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using Extensions;
-using Microsoft.AspNetCore.Mvc;
-using Shouldly;
-using Xunit;
-using Entities = Application.Authors.Entities;
-
 public class AuthorEndpointTests : IDisposable
 {
     private UrlShortenerApplication application;
@@ -18,6 +9,7 @@ public class AuthorEndpointTests : IDisposable
         this.application = new();
     }
 
+    /*
     [Fact]
     public async Task GetAuthors_ShouldReturn_Ok()
     {
@@ -121,6 +113,7 @@ public class AuthorEndpointTests : IDisposable
         result.Errors.ShouldContainKey("");
         result.Errors[""].ShouldBe(["The Id supplied in the request is not valid."]);
     }
+    */
 
     public void Dispose()
     {

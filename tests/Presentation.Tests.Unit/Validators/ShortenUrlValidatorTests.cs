@@ -1,19 +1,21 @@
 namespace UrlShortener.Presentation.Tests.Unit.Validators;
 
-public class UpdateReviewValidatorTests
-{
-    /*private static readonly UpdateReviewValidator Validator = new();
+using Presentation.Validators;
 
-    [Theory]
+public class ShortenUrlValidatorTests
+{
+    private static readonly ShortenUrlValidator Validator = new();
+
+    /*[Theory]
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public void Validator_ShouldNotHaveValidationErrorFor_ReviewAuthorId(int stars)
+    public void Validator_ShouldNotHaveValidationErrorFor_ValidRequest(int stars)
     {
         // Arrange
-        var request = new UpdateReviewRequest
+        var command = new CreateReviewRequest
         {
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
@@ -21,7 +23,7 @@ public class UpdateReviewValidatorTests
         };
 
         // Act
-        var result = Validator.TestValidate(request);
+        var result = Validator.TestValidate(command);
 
         // Assert
         result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
@@ -33,7 +35,7 @@ public class UpdateReviewValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_ReviewAuthorId()
     {
         // Arrange
-        var request = new UpdateReviewRequest
+        var command = new CreateReviewRequest
         {
             AuthorId = Guid.Empty,
             MovieId = Guid.NewGuid(),
@@ -41,12 +43,12 @@ public class UpdateReviewValidatorTests
         };
 
         // Act
-        var result = Validator.TestValidate(request);
+        var result = Validator.TestValidate(command);
 
         // Assert
         _ = result
-            .ShouldHaveValidationErrorFor(request => request.AuthorId)
-            .WithErrorMessage("An author id was not supplied to Update the review.");
+            .ShouldHaveValidationErrorFor(command => command.AuthorId)
+            .WithErrorMessage("An author id was not supplied to create the review.");
 
         result.ShouldNotHaveValidationErrorFor(request => request.MovieId);
         result.ShouldNotHaveValidationErrorFor(request => request.Stars);
@@ -56,7 +58,7 @@ public class UpdateReviewValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_ReviewedMovieId()
     {
         // Arrange
-        var request = new UpdateReviewRequest
+        var command = new CreateReviewRequest
         {
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.Empty,
@@ -64,12 +66,12 @@ public class UpdateReviewValidatorTests
         };
 
         // Act
-        var result = Validator.TestValidate(request);
+        var result = Validator.TestValidate(command);
 
         // Assert
         _ = result
-            .ShouldHaveValidationErrorFor(request => request.MovieId)
-            .WithErrorMessage("A movie id was not supplied to Update the review.");
+            .ShouldHaveValidationErrorFor(command => command.MovieId)
+            .WithErrorMessage("A movie id was not supplied to create the review.");
 
         result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
         result.ShouldNotHaveValidationErrorFor(request => request.Stars);
@@ -84,7 +86,7 @@ public class UpdateReviewValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_Stars(int stars)
     {
         // Arrange
-        var request = new UpdateReviewRequest
+        var command = new CreateReviewRequest
         {
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
@@ -92,11 +94,11 @@ public class UpdateReviewValidatorTests
         };
 
         // Act
-        var result = Validator.TestValidate(request);
+        var result = Validator.TestValidate(command);
 
         // Assert
         _ = result
-            .ShouldHaveValidationErrorFor(request => request.Stars)
+            .ShouldHaveValidationErrorFor(command => command.Stars)
             .WithErrorMessage("A star rating must be between 1 and 5.");
 
         result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
