@@ -40,6 +40,7 @@ public class MovieReviewsDataFixture : IDisposable
                 new AuthorMappingProfile(),
                 new MovieMappingProfile(),
                 new ReviewMappingProfile(),
+                new UrlMappingProfile(),
             ])
         ).CreateMapper();
 

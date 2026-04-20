@@ -13,7 +13,7 @@ using Models;
 using ApplicationAuthor = Application.Authors.Entities.Author;
 using ApplicationMovie = Application.Movies.Entities.Movie;
 using ApplicationReview = Application.Reviews.Entities.Review;
-using Url = Application.Urls.Entities.Url;
+using ApplicationUrl = Application.Urls.Entities.Url;
 
 internal class EntityFrameworkDefaultRepository
     : IAuthorsRepository,
@@ -223,8 +223,24 @@ internal class EntityFrameworkDefaultRepository
 
     #endregion Reviews
 
-    public async Task<Url> CreateUrl(string originalUrl)
+    public async Task<ApplicationUrl> CreateUrl(
+        string originalUrl,
+        CancellationToken cancellationToken
+    )
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<ApplicationUrl?> GetByShortCode(
+        string shortCode,
+        CancellationToken cancellationToken
+    )
+    {
+        var url = await this
+            .context.Urls.AsNoTracking()
+            .Where(it => it.ShortCode == shortCode)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return this.mapper.Map<ApplicationUrl>(url);
     }
 }

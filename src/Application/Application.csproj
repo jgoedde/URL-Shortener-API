@@ -16,8 +16,4 @@
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Urls\Queries\" />
-  </ItemGroup>
 </Project>
