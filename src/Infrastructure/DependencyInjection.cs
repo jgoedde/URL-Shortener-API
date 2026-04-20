@@ -4,7 +4,8 @@ using System;
 using Application.Authors;
 using Application.Movies;
 using Application.Reviews;
-using Databases.MovieReviews;
+using Application.Urls;
+using Databases.UrlShortener;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,22 +17,25 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        _ = services.AddDbContext<MovieReviewsDbContext>(opt =>
+        _ = services.AddDbContext<ApplicationDbContext>(opt =>
             opt.UseNpgsql(configuration.GetConnectionString("Default"))
         );
 
         _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-        _ = services.AddScoped<EntityFrameworkMovieReviewsRepository>();
+        _ = services.AddScoped<EntityFrameworkDefaultRepository>();
 
         _ = services.AddScoped<IAuthorsRepository>(p =>
-            p.GetRequiredService<EntityFrameworkMovieReviewsRepository>()
+            p.GetRequiredService<EntityFrameworkDefaultRepository>()
         );
         _ = services.AddScoped<IMoviesRepository>(x =>
-            x.GetRequiredService<EntityFrameworkMovieReviewsRepository>()
+            x.GetRequiredService<EntityFrameworkDefaultRepository>()
         );
         _ = services.AddScoped<IReviewsRepository>(x =>
-            x.GetRequiredService<EntityFrameworkMovieReviewsRepository>()
+            x.GetRequiredService<EntityFrameworkDefaultRepository>()
+        );
+        _ = services.AddScoped<IUrlsRepository>(x =>
+            x.GetRequiredService<EntityFrameworkDefaultRepository>()
         );
 
         _ = services.AddSingleton(TimeProvider.System);
