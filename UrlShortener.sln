@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation.Tests.Integrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Tests.Unit", "tests\Presentation.Tests.Unit\Presentation.Tests.Unit.csproj", "{77B504BC-C261-4998-9B09-E2BD1A477AB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "load-tests", "load-tests\load-tests.csproj", "{ACEDC42D-7D3A-4986-A3EE-29222D3478C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

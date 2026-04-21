@@ -1,0 +1,6 @@
+<Project>
+  <ItemGroup>
+    <None Include="**\*.ts" />
+    <None Include="**\*.json" />
+  </ItemGroup>
+</Project>
