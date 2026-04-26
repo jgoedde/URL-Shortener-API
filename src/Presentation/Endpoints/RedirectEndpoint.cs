@@ -1,8 +1,6 @@
 namespace UrlShortener.Presentation.Endpoints;
 
-using System.Net;
 using Application.Common.Exceptions;
-using Application.Urls.Queries.GetOriginalUrl;
 using Filters;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +38,7 @@ public static class RedirectEndpoint
             .Produces(302)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithName("url-redirect")
             .WithSummary("Redirects to original URL")
             .WithDescription("Redirects to original URL with HTTP 302 code by short code.");
 

@@ -3,7 +3,9 @@ namespace UrlShortener.Presentation.Serialization;
 using System.Text.Json.Serialization;
 using Application.Urls.Entities;
 using Application.Versions.Entities;
+using Infrastructure.Databases.UrlShortener.Models;
 using Requests;
+using Responses;
 
 /// <summary>
 /// JSON serialization context for compile-time source generation.
@@ -19,5 +21,7 @@ using Requests;
 [JsonSerializable(typeof(Version))]
 [JsonSerializable(typeof(Url))]
 [JsonSerializable(typeof(List<Version>))]
+[JsonSerializable(typeof(GetUrlsRequest))]
+[JsonSerializable(typeof(PaginatedList<UrlApiResponse>))]
 [JsonSerializable(typeof(ShortenUrlRequest))]
-public partial class AppJsonSerializerContext : JsonSerializerContext { }
+public partial class AppJsonSerializerContext : JsonSerializerContext;

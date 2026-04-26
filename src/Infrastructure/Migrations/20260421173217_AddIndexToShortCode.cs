@@ -14,15 +14,14 @@ namespace UrlShortener.Migrations
                 name: "IX_Urls_ShortCode",
                 table: "Urls",
                 column: "ShortCode",
-                unique: true);
+                unique: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_Urls_ShortCode",
-                table: "Urls");
+            migrationBuilder.DropIndex(name: "IX_Urls_ShortCode", table: "Urls");
         }
     }
 }

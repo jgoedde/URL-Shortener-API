@@ -2,10 +2,12 @@ namespace UrlShortener.Presentation.Endpoints;
 
 using Application.Urls.Commands.ShortenUrl;
 using Filters;
+using Infrastructure.Databases.UrlShortener.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Requests;
+using Responses;
 using Entities = Application.Urls.Entities;
 
 public static class UrlEndpoints
@@ -21,6 +23,12 @@ public static class UrlEndpoints
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .ProducesValidationProblem()
             .WithSummary("Shorten an URL");
+
+        _ = root.MapGet("/", GetUrlsWithPagination)
+            .Produces<PaginatedList<UrlApiResponse>>()
+            .ProducesValidationProblem()
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithSummary("Gets a list of URLs ordered by their creation time.");
 
         return app;
     }
@@ -40,6 +48,42 @@ public static class UrlEndpoints
             return TypedResults.Problem(
                 ex.StackTrace,
                 ex.Message,
+                StatusCodes.Status500InternalServerError
+            );
+        }
+    }
+
+    private static async Task<
+        Results<Ok<PaginatedList<UrlApiResponse>>, ProblemHttpResult>
+    > GetUrlsWithPagination(
+        [Validate] [AsParameters] GetUrlsRequest request,
+        [FromServices] ISender sender,
+        [FromServices] LinkGenerator linker,
+        HttpContext ctx
+    )
+    {
+        try
+        {
+            var list = await sender.Send(
+                new GetUrlsWithPaginationQuery(request.PageNumber, request.PageSize)
+            );
+
+            var mapped = list.Map(url => new UrlApiResponse(
+                ShortUrl: linker.GetUriByName(ctx, "url-redirect", new { url.ShortCode })
+                    ?? string.Empty,
+                OriginalUrl: url.OriginalUrl,
+                ShortCode: url.ShortCode,
+                Created: url.Created,
+                LastModified: url.LastModified
+            ));
+
+            return TypedResults.Ok(mapped);
+        }
+        catch (Exception e)
+        {
+            return TypedResults.Problem(
+                e.StackTrace,
+                e.Message,
                 StatusCodes.Status500InternalServerError
             );
         }
