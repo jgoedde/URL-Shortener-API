@@ -3,16 +3,35 @@ namespace UrlShortener;
 using Application;
 using Application.Urls;
 using Application.Urls.Entities;
+using Application.Users;
 using MediatR;
 
 public record ShortenUrlCommand(string LongUrl) : IRequest<Url>;
 
-public class ShortenUrlHandler(IApplicationDbContext dbContext, UrlEncoder urlEncoder)
-    : IRequestHandler<ShortenUrlCommand, Url>
+public class ShortenUrlHandler(
+    IApplicationDbContext dbContext,
+    UrlEncoder urlEncoder,
+    ICurrentUser currentUser
+) : IRequestHandler<ShortenUrlCommand, Url>
 {
     public async Task<Url> Handle(ShortenUrlCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Url { ShortCode = "PLACEHOLDER", OriginalUrl = request.LongUrl };
+        var user = await dbContext.Users.FindAsync(
+            [currentUser.Id],
+            cancellationToken: cancellationToken
+        );
+
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found.");
+        }
+
+        var entity = new Url
+        {
+            ShortCode = "PLACEHOLDER",
+            OriginalUrl = request.LongUrl,
+            CreatedBy = user,
+        };
 
         dbContext.Urls.Add(entity);
 

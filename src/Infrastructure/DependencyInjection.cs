@@ -1,6 +1,7 @@
 namespace UrlShortener.Infrastructure;
 
 using Application;
+using Application.Users;
 using Application.Users.Entities;
 using Databases.UrlShortener;
 using Databases.UrlShortener.Interceptors;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Users;
 
 public static class DependencyInjection
 {
@@ -50,6 +52,9 @@ public static class DependencyInjection
         _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         _ = services.AddSingleton(TimeProvider.System);
+
+        _ = services.AddHttpContextAccessor();
+        _ = services.AddScoped<ICurrentUser, CurrentUser>();
 
         return services;
     }
