@@ -39,6 +39,7 @@ public static class RedirectEndpoint
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithName("url-redirect")
+            .WithTags("root")
             .WithSummary("Redirects to original URL")
             .WithDescription("Redirects to original URL with HTTP 302 code by short code.");
 

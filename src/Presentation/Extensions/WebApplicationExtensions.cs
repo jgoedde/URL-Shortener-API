@@ -1,9 +1,9 @@
 namespace UrlShortener.Presentation.Extensions;
 
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Builder;
+using Application.Users.Entities;
+using Endpoints;
 using Serilog;
-using UrlShortener.Presentation.Endpoints;
 
 [ExcludeFromCodeCoverage]
 public static class WebApplicationExtensions
@@ -20,6 +20,8 @@ public static class WebApplicationExtensions
         #region Security
 
         _ = app.UseHsts();
+        _ = app.UseAuthentication();
+        _ = app.UseAuthorization();
 
         #endregion Security
 
@@ -43,6 +45,7 @@ public static class WebApplicationExtensions
         _ = app.MapVersionEndpoints();
         _ = app.MapRedirectEndpoint();
         _ = app.MapUrlEndpoints();
+        _ = app.MapIdentityApi<AppUser>().WithTags("auth");
 
         #endregion MinimalApi
 

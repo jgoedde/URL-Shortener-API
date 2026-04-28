@@ -8,9 +8,12 @@ using System.Text.Json.Serialization;
 using Application;
 using FluentValidation;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 using Serilog;
@@ -76,8 +79,10 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddEndpointsApiExplorer();
 
         _ = builder.Services.AddOpenApi(options =>
+        {
+            options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
             options.AddDocumentTransformer(
-                (document, context, cancellationToken) =>
+                (document, _, _) =>
                 {
                     document.Info = new OpenApiInfo
                     {
@@ -99,8 +104,8 @@ public static class WebApplicationBuilderExtensions
                     };
                     return Task.CompletedTask;
                 }
-            )
-        );
+            );
+        });
 
         #endregion Swagger
 
@@ -121,5 +126,53 @@ public static class WebApplicationBuilderExtensions
         #endregion Project Dependencies
 
         return builder;
+    }
+}
+
+internal sealed class BearerSecuritySchemeTransformer(
+    IAuthenticationSchemeProvider authenticationSchemeProvider
+) : IOpenApiDocumentTransformer
+{
+    public async Task TransformAsync(
+        OpenApiDocument document,
+        OpenApiDocumentTransformerContext context,
+        CancellationToken cancellationToken
+    )
+    {
+        var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
+        if (
+            authenticationSchemes.Any(authScheme =>
+                authScheme.Name == IdentityConstants.BearerScheme
+            )
+        )
+        {
+            var securitySchemes = new Dictionary<string, IOpenApiSecurityScheme>
+            {
+                [IdentityConstants.BearerScheme] = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    In = ParameterLocation.Header,
+                },
+            };
+            document.Components ??= new OpenApiComponents();
+            document.Components.SecuritySchemes = securitySchemes;
+
+            foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
+            {
+                operation.Value.Security ??= [];
+                operation.Value.Security.Add(
+                    new OpenApiSecurityRequirement
+                    {
+                        [
+                            new OpenApiSecuritySchemeReference(
+                                IdentityConstants.BearerScheme,
+                                document
+                            )
+                        ] = [],
+                    }
+                );
+            }
+        }
     }
 }

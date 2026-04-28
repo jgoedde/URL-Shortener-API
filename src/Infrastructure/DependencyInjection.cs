@@ -1,8 +1,10 @@
 namespace UrlShortener.Infrastructure;
 
 using Application;
+using Application.Users.Entities;
 using Databases.UrlShortener;
 using Databases.UrlShortener.Interceptors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,22 @@ public static class DependencyInjection
                 opt.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             }
         );
+
+        _ = services
+            .AddIdentityApiEndpoints<AppUser>(options =>
+            {
+                options.Password = new PasswordOptions
+                {
+                    RequireDigit = false,
+                    RequiredLength = 2,
+                    RequireLowercase = false,
+                    RequireNonAlphanumeric = false,
+                    RequireUppercase = false,
+                };
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        _ = services.AddAuthorization();
 
         _ = services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>()

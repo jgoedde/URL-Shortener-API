@@ -1,6 +1,5 @@
 namespace UrlShortener.Presentation.Endpoints;
 
-using Application.Urls.Commands.ShortenUrl;
 using Filters;
 using Infrastructure.Databases.UrlShortener.Models;
 using MediatR;
@@ -15,6 +14,8 @@ public static class UrlEndpoints
     public static WebApplication MapUrlEndpoints(this WebApplication app)
     {
         var root = app.MapGroup("/api/urls")
+            .RequireAuthorization()
+            .WithTags("urls")
             .AddEndpointFilterFactory(ValidationFilter.ValidationFilterFactory)
             .WithDescription("Lookup, Find and Manipulate Urls");
 
