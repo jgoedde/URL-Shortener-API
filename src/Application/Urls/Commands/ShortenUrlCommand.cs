@@ -8,7 +8,7 @@ using MediatR;
 
 public record ShortenUrlCommand(string LongUrl) : IRequest<Url>;
 
-public class ShortenUrlHandler(
+internal sealed class ShortenUrlHandler(
     IApplicationDbContext dbContext,
     UrlEncoder urlEncoder,
     ICurrentUser currentUser
