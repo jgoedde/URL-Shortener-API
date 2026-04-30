@@ -1,6 +1,8 @@
 namespace UrlShortener;
 
 using Application;
+using Application.Common.Enums;
+using Application.Common.Exceptions;
 using Application.Urls;
 using Application.Urls.Entities;
 using Application.Users;
@@ -21,16 +23,13 @@ internal sealed class ShortenUrlHandler(
             cancellationToken: cancellationToken
         );
 
-        if (user is null)
-        {
-            throw new InvalidOperationException("User not found.");
-        }
+        NotFoundException.ThrowIfNull(user, EntityType.User);
 
         var entity = new Url
         {
             ShortCode = "PLACEHOLDER",
             OriginalUrl = request.LongUrl,
-            CreatedBy = user,
+            CreatedBy = user!,
         };
 
         dbContext.Urls.Add(entity);

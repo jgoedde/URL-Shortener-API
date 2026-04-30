@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Requests;
 using Responses;
-using Entities = Application.Urls.Entities;
 
 public static class UrlEndpoints
 {
@@ -20,29 +19,41 @@ public static class UrlEndpoints
             .WithDescription("Lookup, Find and Manipulate Urls");
 
         _ = root.MapPost("/", CreateUrl)
-            .Produces<Entities.Url>(StatusCodes.Status201Created)
+            .Produces<UrlApiResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .ProducesValidationProblem()
             .WithSummary("Shorten an URL");
 
         _ = root.MapGet("/", GetUrlsWithPagination)
             .Produces<PaginatedList<UrlApiResponse>>()
-            .ProducesValidationProblem()
             .ProducesProblem(StatusCodes.Status500InternalServerError)
             .WithSummary("Gets a list of URLs ordered by their creation time.");
 
         return app;
     }
 
-    private static async Task<
-        Results<Created<Entities.Url>, NotFound<string>, ProblemHttpResult>
-    > CreateUrl([Validate] [FromBody] ShortenUrlRequest request, [FromServices] ISender sender)
+    private static async Task<Results<Created<UrlApiResponse>, ProblemHttpResult>> CreateUrl(
+        [Validate] [FromBody] ShortenUrlRequest request,
+        [FromServices] ISender sender,
+        [FromServices] LinkGenerator linker,
+        HttpContext ctx
+    )
     {
         try
         {
-            var response = await sender.Send(new ShortenUrlCommand(request.Url));
+            var url = await sender.Send(new ShortenUrlCommand(request.Url));
 
-            return TypedResults.Created($"/api/urls/{response.ShortCode}", response);
+            return TypedResults.Created(
+                $"/api/urls/{url.ShortCode}",
+                new UrlApiResponse(
+                    ShortUrl: linker.GetUriByName(ctx, "url-redirect", new { url.ShortCode })
+                        ?? string.Empty,
+                    OriginalUrl: url.OriginalUrl,
+                    ShortCode: url.ShortCode,
+                    Created: url.Created,
+                    LastModified: url.LastModified
+                )
+            );
         }
         catch (Exception ex)
         {

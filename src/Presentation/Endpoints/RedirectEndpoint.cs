@@ -34,7 +34,7 @@ public static class RedirectEndpoint
         }
         catch (NotFoundException ex)
         {
-            return TypedResults.NotFound(ex.Message);
+            return TypedResults.Problem(ex.StackTrace, ex.Message, StatusCodes.Status404NotFound);
         }
         catch (Exception ex)
         {

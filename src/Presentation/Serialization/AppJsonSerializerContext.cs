@@ -2,7 +2,6 @@ namespace UrlShortener.Presentation.Serialization;
 
 using System.Text.Json.Serialization;
 using Application.Urls.Entities;
-using Application.Versions.Entities;
 using Infrastructure.Databases.UrlShortener.Models;
 using Requests;
 using Responses;

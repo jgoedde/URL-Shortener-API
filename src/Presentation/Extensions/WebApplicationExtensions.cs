@@ -42,7 +42,6 @@ public static class WebApplicationExtensions
 
         #region MinimalApi
 
-        _ = app.MapVersionEndpoints();
         _ = app.MapRedirectEndpoint();
         _ = app.MapUrlEndpoints();
         _ = app.MapIdentityApi<AppUser>().WithTags("auth");
