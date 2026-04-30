@@ -29,7 +29,7 @@ export function setup() {
 
 export default function ({ token }) {
     const res = http.post(
-        `${BASE_URL}/urls`,
+        `${BASE_URL}/api/urls`,
         JSON.stringify({ url: "https://example.com" }),
         {
             headers: {
