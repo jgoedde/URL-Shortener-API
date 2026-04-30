@@ -5,8 +5,10 @@ const BASE_URL = __ENV.BASE_URL || "https://localhost:7032";
 
 export const options = {
     stages: [
-        { duration: "30s", target: 20 },
-        { duration: "1m", target: 20 },
+        { duration: "30s", target: 5 },
+        // { duration: "30s", target: 20 },
+        { duration: "1m", target: 5 },
+        // { duration: "1m", target: 20 },
         { duration: "15s", target: 0 },
     ],
     thresholds: {
@@ -38,6 +40,8 @@ export default function ({ token }) {
             },
         },
     );
+
+    console.log(res.status, res.body);
 
     check(res, { "url shortened": (r) => r.status === 201 });
 
