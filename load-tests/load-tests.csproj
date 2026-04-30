@@ -1,6 +1,10 @@
 <Project>
   <ItemGroup>
-    <None Include="**\*.ts" />
-    <None Include="**\*.json" />
+    <Content Include=".nvmrc" />
+    <Content Include=".prettierrc" />
+    <Content Include="create-url.js" />
+    <Content Include="script.js" />
+    <Content Include="package.json" />
+    <Content Include="package-lock.json" />
   </ItemGroup>
 </Project>
