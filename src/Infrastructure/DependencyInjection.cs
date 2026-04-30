@@ -21,10 +21,22 @@ public static class DependencyInjection
     {
         _ = services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
+        _ = services.AddScoped<DatabaseSeeder>();
+
         _ = services.AddDbContext<ApplicationDbContext>(
             (sp, opt) =>
             {
-                opt.UseNpgsql(configuration.GetConnectionString("Default"));
+                opt.UseNpgsql(configuration.GetConnectionString("Default"))
+                    .UseSeeding(
+                        (_, _) =>
+                            sp.GetRequiredService<DatabaseSeeder>()
+                                .SeedAsync()
+                                .GetAwaiter()
+                                .GetResult()
+                    )
+                    .UseAsyncSeeding(
+                        async (_, _, _) => await sp.GetRequiredService<DatabaseSeeder>().SeedAsync()
+                    );
                 opt.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             }
         );
@@ -57,5 +69,13 @@ public static class DependencyInjection
         _ = services.AddScoped<ICurrentUser, CurrentUser>();
 
         return services;
+    }
+
+    public static async Task EnsureDatabaseCreatedAsync(this IServiceProvider app)
+    {
+        await using var serviceScope = app.CreateAsyncScope();
+        await using var dbContext =
+            serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.EnsureCreatedAsync();
     }
 }

@@ -1,9 +1,12 @@
 using Serilog;
+using UrlShortener.Infrastructure;
 using UrlShortener.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args).ConfigureApplicationBuilder();
 
 var app = builder.Build().ConfigureApplication();
+
+await app.Services.EnsureDatabaseCreatedAsync();
 
 try
 {
