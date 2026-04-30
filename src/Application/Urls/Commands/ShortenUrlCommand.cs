@@ -25,8 +25,11 @@ internal sealed class ShortenUrlHandler(
 
         NotFoundException.ThrowIfNull(user, EntityType.User);
 
+        // TODO: Get `nextId` via DB instead of doing 2 UOW commits.
+
         var entity = new Url
         {
+            Id = 287393928,
             ShortCode = "PLACEHOLDER",
             OriginalUrl = request.LongUrl,
             CreatedBy = user!,
