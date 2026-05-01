@@ -17,6 +17,8 @@ internal class ApplicationDbContext(DbContextOptions<ApplicationDbContext> optio
     {
         base.OnModelCreating(modelBuilder);
 
+        _ = modelBuilder.HasSequence<int>("urls_id_seq");
+
         _ = modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

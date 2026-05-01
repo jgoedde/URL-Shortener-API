@@ -1,6 +1,7 @@
 namespace UrlShortener.Infrastructure;
 
 using Application;
+using Application.Urls;
 using Application.Users;
 using Application.Users.Entities;
 using Databases.UrlShortener;
@@ -67,6 +68,8 @@ public static class DependencyInjection
 
         _ = services.AddHttpContextAccessor();
         _ = services.AddScoped<ICurrentUser, CurrentUser>();
+
+        _ = services.AddScoped<ISequenceService, SequenceService>();
 
         return services;
     }
