@@ -1,44 +1,38 @@
-# Clean Minimal API
+# URL Shortener API
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/stphnwlsh/cleanminimalapi/build-pipeline.yml?label=Build%20Pipeline%20&logo=github&style=for-the-badge)](https://github.com/stphnwlsh/UrlShortener/actions/workflows/build-pipeline.yml)
-[![Codecov](https://img.shields.io/codecov/c/github/stphnwlsh/UrlShortener?label=Code%20Coverage&logo=codecov&logoColor=white&style=for-the-badge)](https://codecov.io/gh/stphnwlsh/UrlShortener)
-[![Nuget](https://img.shields.io/nuget/v/UrlShortener.Template?label=nuget%20template&logo=nuget&logoColor=white&style=for-the-badge)](https://www.nuget.org/packages/UrlShortener.Template/)
-[![GitHub Sponsors](https://img.shields.io/static/v1?label=GitHub%20Sponsors&message=$1&logo=githubsponsors&logoColor=white&color=ea4aaa&style=for-the-badge)](https://github.com/sponsors/stphnwlsh/sponsorships?sponsor=stphnwlsh&tier_id=333950)
-[![Buy Me A Coffee](https://img.shields.io/static/v1?label=Buy%20Me%20A%20Coffee&message=$1&logo=buymeacoffee&logoColor=white&color=ffdd00&style=for-the-badge)](https://www.buymeacoffee.com/stphnwlsh)
+Scalable .NET based URL Shortener API focusing on system design (learning project)
 
-This is a template API using a streamlined version of [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) alongside .NET's [Minimal APIs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-10.0).
+## Load Testing
+
+Load tests are written in [k6](https://k6.io) and live in `/load-tests`.
+
+### Running
+
+```bash
+k6 run -e BASE_URL="http://localhost:5000" load-tests/src/create-url.js
+```
+
+### Results
+
+<details>
+<summary>POST /api/urls - Shorten URL</summary>
+
+**2026-05-01 — 20 VUs, 1m45s, release mode, local PostgreSQL**
+
+| Metric     | Value       |
+|------------|-------------|
+| Avg        | 57.37ms     |
+| p(95)      | 80.25ms     |
+| p(99)      | 100.27ms    |
+| Max        | 670.76ms    |
+| Throughput | 14.82 req/s |
+| Error rate | 0.00%       |
+
+</details>
 
 ## Prerequisites
 
 This solution in built on the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), you need to install that before it will work for you.  If you want to build the Dockerfile you will need to install [Docker](https://www.docker.com/products/docker-desktop) as well.
-
-## Installation
-
-This is a template and you can install it using the [dotnet new cli](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new).  To install the lastest version of the template run the following command.
-
-``` bash
-dotnet new install UrlShortener.Template
-```
-
-To create a new solution using this template run the following command
-
-```bash
-dotnet new cleanminimalapi --name {YOUR_SOLUTION_NAMESPACE} --au "{YOU_AUTHORS_NAME}"
-```
-
-## Docker
-
-There's a dockerfile included in the build folder and serves the purpose of restoring, building, testing, publishing and then creating a runtime image of the API.  Works on my machine.....you can add a version prefix and suffix to version the service in the assembly.  The Dockerfile does have stages so you can just run the tests or publish the solution depending on your needs.  Review the `build-pipeline.yml` in the github folder for more detailed usage.
-
-``` bash
-docker build . -t cleanminimalapi:latest --build-arg VERSION_PREFIX {VERSION_NUMBER} -- build-arg VERSION_SUFFIX {PRERELEASE_NAME}
-```
-
-The Github Action does publish an image of this API and you check it out for yourself by runnning this command in docker.
-
-``` bash
-docker pull stphnwlsh/cleanminimalapi
-```
 
 ## Architecture
 
@@ -63,9 +57,9 @@ There are plenty of handy implementations of features throughout this solution, 
 - Logging using [Serilog](https://github.com/serilog/serilog)
 - Mediator Pattern using [Mediatr](https://github.com/jbogard/MediatR)
 - Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation)
-- Testing using [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute)
+- ~~Testing using [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute)~~
 - OpenApi using [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
-- Object Mapping using [AutoMapper](https://github.com/AutoMapper/AutoMapper)
+- ~~Object Mapping using [AutoMapper](https://github.com/AutoMapper/AutoMapper)~~
 
 ## Resources
 
@@ -76,12 +70,6 @@ This sample would not have been possible without gaining inspiration from the fo
 - [Scott Hanselman - Minimal APIs in .NET 6 but where are the Unit Tests?](https://www.hanselman.com/blog/minimal-apis-in-net-6-but-where-are-the-unit-tests)
 - [Andrew Lock - Reducing log verbosity with Serilog RequestLogging](https://andrewlock.net/using-serilog-aspnetcore-in-asp-net-core-3-reducing-log-verbosity/)
 - [Ben Foster - Minimal API validation with ASP.NET 7.0 Endpoint Filters](https://benfoster.io/blog/minimal-api-validation-endpoint-filters/)
-
-## Connect and Support
-
-If you like this, or want to checkout my other work, please connect with me on [LinkedIn](https://www.linkedin.com/in/stphnwlsh), and/or follow me on [Medium](https://stphnwlsh.medium.com) or [GitHub](https://github.com/stphnwlsh).
-
-If you want to see more updates or more projects then please support me at [GitHub Sponsors](https://github.com/stphnwlsh) or [Buy Me A Coffee](https://www.buymeacoffee.com/stphnwlsh)
 
 ## Developing
 
