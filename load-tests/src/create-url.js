@@ -1,10 +1,10 @@
 import http from "k6/http";
 import { sleep, check } from "k6";
-import {generateUrlToShorten} from "./generators/domain";
+import { generateUrlToShorten } from "./generators/domain.js";
 
 const BASE_URL = __ENV.BASE_URL || "https://localhost:7032";
-const TEST_USER_EMAIL = __ENV.BASE_URL || "test@example.com";
-const TEST_USER_PASSWORD = __ENV.BASE_URL || "abc";
+const TEST_USER_EMAIL = __ENV.TEST_USER_EMAIL || "test@example.com";
+const TEST_USER_PASSWORD = __ENV.TEST_USER_PASSWORD || "abc";
 
 export const options = {
     stages: [
@@ -48,7 +48,6 @@ export default function ({ token }) {
 
     check(res, {
         "is URL shortened": (r) => r.status === 201,
-        "is server error": (r) => r.status >= 500 && r.status < 600,
     });
 
     sleep(1);
