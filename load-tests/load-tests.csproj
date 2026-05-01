@@ -2,9 +2,8 @@
   <ItemGroup>
     <Content Include=".nvmrc" />
     <Content Include=".prettierrc" />
-    <Content Include="create-url.js" />
-    <Content Include="script.js" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
+    <Content Include="src\**" />
   </ItemGroup>
 </Project>
