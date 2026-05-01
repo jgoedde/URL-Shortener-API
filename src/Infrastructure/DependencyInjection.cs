@@ -62,8 +62,6 @@ public static class DependencyInjection
             provider.GetRequiredService<ApplicationDbContext>()
         );
 
-        _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
         _ = services.AddSingleton(TimeProvider.System);
 
         _ = services.AddHttpContextAccessor();
