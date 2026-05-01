@@ -1,10 +1,9 @@
-namespace UrlShortener;
+namespace UrlShortener.Application.Urls.Queries;
 
-using Application;
-using Application.Urls.Entities;
-using Application.Users;
+using Entities;
 using Infrastructure.Databases.UrlShortener.Models;
 using MediatR;
+using Users;
 
 public record GetUrlsWithPaginationQuery(int PageNumber, int PageSize)
     : IRequest<PaginatedList<Url>>;

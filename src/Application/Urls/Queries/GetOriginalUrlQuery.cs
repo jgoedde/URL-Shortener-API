@@ -1,9 +1,8 @@
-namespace UrlShortener;
+namespace UrlShortener.Application.Urls.Queries;
 
 using System.ComponentModel.DataAnnotations;
-using Application;
-using Application.Common.Enums;
-using Application.Common.Exceptions;
+using Common.Enums;
+using Common.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

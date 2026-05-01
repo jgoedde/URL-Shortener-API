@@ -1,6 +1,7 @@
 namespace UrlShortener.Presentation.Endpoints;
 
 using Application.Common.Exceptions;
+using Application.Urls.Queries;
 using Filters;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;

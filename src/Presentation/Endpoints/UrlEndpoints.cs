@@ -1,5 +1,7 @@
 namespace UrlShortener.Presentation.Endpoints;
 
+using Application.Urls.Commands;
+using Application.Urls.Queries;
 using Filters;
 using Infrastructure.Databases.UrlShortener.Models;
 using MediatR;
