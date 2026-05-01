@@ -79,3 +79,5 @@ export default function ({ shortUrl }) {
 
     sleep(1);
 }
+
+// TODO: Use random URLs, set up a pool of short URLs to have a more realistic load
