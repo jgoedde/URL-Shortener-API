@@ -2,6 +2,7 @@
   <ItemGroup>
     <Content Include=".nvmrc" />
     <Content Include=".prettierrc" />
+    <Content Include="eslint.config.mjs" />
     <Content Include="package.json" />
     <Content Include="package-lock.json" />
     <Content Include="src\**" />

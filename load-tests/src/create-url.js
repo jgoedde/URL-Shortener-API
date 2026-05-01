@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import http from "k6/http";
 import { sleep, check } from "k6";
 import { generateUrlToShorten } from "./generators/domain.js";
