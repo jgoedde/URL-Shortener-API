@@ -2,6 +2,10 @@
 
 A learning project exploring backend engineering and system design concepts using .NET - clean architecture, CQRS, distributed caching, and load testing.
 
+## Architecture
+
+<img width="1193" height="941" alt="image" src="https://github.com/user-attachments/assets/b4f4323f-bc19-4ec9-894a-63ad2e62ca23" />
+
 ## Load Testing
 
 Load tests are written in [k6](https://k6.io) and live in `/load-tests`.
