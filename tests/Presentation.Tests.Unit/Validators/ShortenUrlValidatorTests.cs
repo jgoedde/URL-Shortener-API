@@ -1,107 +1,37 @@
 namespace UrlShortener.Presentation.Tests.Unit.Validators;
 
+using FluentValidation.TestHelper;
 using Presentation.Validators;
+using Requests;
+using Xunit;
 
 public class ShortenUrlValidatorTests
 {
     private static readonly ShortenUrlValidator Validator = new();
 
-    /*[Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    [InlineData(4)]
-    [InlineData(5)]
-    public void Validator_ShouldNotHaveValidationErrorFor_ValidRequest(int stars)
+    [Theory]
+    [InlineData("https://example.com")]
+    [InlineData("https://example.com/path")]
+    [InlineData("https://example.com/path?q=1&r=2")]
+    [InlineData("https://example.com/path#fragment")]
+    [InlineData("https://sub.example.co.uk/deep/path")]
+    public void ValidUrls_ShouldPass(string url)
     {
-        // Arrange
-        var command = new CreateReviewRequest
-        {
-            AuthorId = Guid.NewGuid(),
-            MovieId = Guid.NewGuid(),
-            Stars = stars,
-        };
-
-        // Act
-        var result = Validator.TestValidate(command);
-
-        // Assert
-        result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
-        result.ShouldNotHaveValidationErrorFor(request => request.MovieId);
-        result.ShouldNotHaveValidationErrorFor(request => request.Stars);
-    }
-
-    [Fact]
-    public void Validator_ShouldHaveValidationErrorFor_ReviewAuthorId()
-    {
-        // Arrange
-        var command = new CreateReviewRequest
-        {
-            AuthorId = Guid.Empty,
-            MovieId = Guid.NewGuid(),
-            Stars = 5,
-        };
-
-        // Act
-        var result = Validator.TestValidate(command);
-
-        // Assert
-        _ = result
-            .ShouldHaveValidationErrorFor(command => command.AuthorId)
-            .WithErrorMessage("An author id was not supplied to create the review.");
-
-        result.ShouldNotHaveValidationErrorFor(request => request.MovieId);
-        result.ShouldNotHaveValidationErrorFor(request => request.Stars);
-    }
-
-    [Fact]
-    public void Validator_ShouldHaveValidationErrorFor_ReviewedMovieId()
-    {
-        // Arrange
-        var command = new CreateReviewRequest
-        {
-            AuthorId = Guid.NewGuid(),
-            MovieId = Guid.Empty,
-            Stars = 5,
-        };
-
-        // Act
-        var result = Validator.TestValidate(command);
-
-        // Assert
-        _ = result
-            .ShouldHaveValidationErrorFor(command => command.MovieId)
-            .WithErrorMessage("A movie id was not supplied to create the review.");
-
-        result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
-        result.ShouldNotHaveValidationErrorFor(request => request.Stars);
+        var result = Validator.TestValidate(new ShortenUrlRequest { Url = url });
+        result.ShouldNotHaveAnyValidationErrors();
     }
 
     [Theory]
-    [InlineData(-1)]
-    [InlineData(0)]
-    [InlineData(6)]
-    [InlineData(100)]
-    [InlineData(-100)]
-    public void Validator_ShouldHaveValidationErrorFor_Stars(int stars)
+    [InlineData("http://example.com")] // not https
+    [InlineData("ftp://example.com")] // wrong scheme
+    [InlineData("https://user@example.com")] // has user info
+    [InlineData("https://u:p@example.com")] // has user:password
+    [InlineData("not-a-url")] // not a URI at all
+    [InlineData("")] // empty
+    [InlineData(null)] // null
+    public void InvalidUrls_ShouldFail(string? url)
     {
-        // Arrange
-        var command = new CreateReviewRequest
-        {
-            AuthorId = Guid.NewGuid(),
-            MovieId = Guid.NewGuid(),
-            Stars = stars,
-        };
-
-        // Act
-        var result = Validator.TestValidate(command);
-
-        // Assert
-        _ = result
-            .ShouldHaveValidationErrorFor(command => command.Stars)
-            .WithErrorMessage("A star rating must be between 1 and 5.");
-
-        result.ShouldNotHaveValidationErrorFor(request => request.AuthorId);
-        result.ShouldNotHaveValidationErrorFor(request => request.MovieId);
-    }*/
+        var result = Validator.TestValidate(new ShortenUrlRequest { Url = url! });
+        result.ShouldHaveValidationErrorFor(x => x.Url);
+    }
 }
