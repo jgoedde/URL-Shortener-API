@@ -36,7 +36,9 @@ public static class DependencyInjection
                                 .GetResult()
                     )
                     .UseAsyncSeeding(
-                        async (_, _, _) => await sp.GetRequiredService<DatabaseSeeder>().SeedAsync()
+                        async (_, _, cancellationToken) =>
+                            await sp.GetRequiredService<DatabaseSeeder>()
+                                .SeedAsync(cancellationToken)
                     );
                 opt.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
             }
