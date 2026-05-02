@@ -1,9 +1,11 @@
 namespace UrlShortener.Infrastructure;
 
 using Application;
+using Application.Common.Caching;
 using Application.Urls;
 using Application.Users;
 using Application.Users.Entities;
+using Caching;
 using Databases.UrlShortener;
 using Databases.UrlShortener.Interceptors;
 using Microsoft.AspNetCore.Identity;
@@ -77,6 +79,7 @@ public static class DependencyInjection
                     )
             )
         );
+        _ = services.AddSingleton<ICacheService, CacheService>();
 
         return services;
     }
