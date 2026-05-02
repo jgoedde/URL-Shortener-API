@@ -14,8 +14,35 @@ k6 run -e BASE_URL="http://localhost:5000" load-tests/src/<script-name>.js
 
 ### Results
 
+<details open>
+<summary>GET /{shortCode} — Redirect, 2026-05-02 (with Redis caching)</summary>
+
+**Parameters:**
+
+- ramp up to 50 VUs → spike to 200 VUs
+- Release Mode
+- local PostgreSQL + Redis
+- randomized short codes
+- commit: [`e0f1ae0b1d38187e7ae4a0ac3a2a0a8df1340a0f`](https://github.com/jgoedde/URL-Shortener-API/commit/e0f1ae0b1d38187e7ae4a0ac3a2a0a8df1340a0f)
+
+| Metric     | Value       |
+|------------|-------------|
+| Avg        | 1.71ms      |
+| p(95)      | 4.61ms      |
+| p(99)      | 8.61ms      |
+| Max        | 278.35ms    |
+| Throughput | 79.26 req/s |
+| Error rate | 0.00%       |
+
+**Thresholds**
+- ✅ `p(95) < 50ms`
+- ✅ `p(99) < 100ms`
+- ✅ `error rate < 1%`
+
+</details>
+
 <details>
-<summary>GET /{shortCode} — Redirect, 2026-05-02</summary>
+<summary>GET /{shortCode} — Redirect, 2026-05-02 (without caching)</summary>
 
 **Parameters:**
 
