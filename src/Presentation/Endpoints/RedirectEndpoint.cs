@@ -30,7 +30,13 @@ public static class RedirectEndpoint
     {
         try
         {
-            var url = await sender.Send(new GetOriginalUrlQuery { ShortCode = shortCode });
+            var url = await sender.Send(
+                new GetOriginalUrlQuery
+                {
+                    ShortCode = shortCode,
+                    Expiration = TimeSpan.FromHours(24),
+                }
+            );
             return TypedResults.Redirect(url); // 302
         }
         catch (NotFoundException ex)

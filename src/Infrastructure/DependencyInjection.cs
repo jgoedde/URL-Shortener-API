@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using Users;
 
 public static class DependencyInjection
@@ -21,9 +22,7 @@ public static class DependencyInjection
     )
     {
         _ = services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-
         _ = services.AddScoped<DatabaseSeeder>();
-
         _ = services.AddDbContext<ApplicationDbContext>(
             (sp, opt) =>
             {
@@ -44,6 +43,10 @@ public static class DependencyInjection
             }
         );
 
+        _ = services.AddScoped<IApplicationDbContext>(provider =>
+            provider.GetRequiredService<ApplicationDbContext>()
+        );
+
         _ = services
             .AddIdentityApiEndpoints<AppUser>(options =>
             {
@@ -60,16 +63,20 @@ public static class DependencyInjection
 
         _ = services.AddAuthorization();
 
-        _ = services.AddScoped<IApplicationDbContext>(provider =>
-            provider.GetRequiredService<ApplicationDbContext>()
-        );
+        _ = services.AddHttpContextAccessor();
+
+        _ = services.AddScoped<ICurrentUser, CurrentUser>();
+        _ = services.AddScoped<ISequenceService, SequenceService>();
 
         _ = services.AddSingleton(TimeProvider.System);
-
-        _ = services.AddHttpContextAccessor();
-        _ = services.AddScoped<ICurrentUser, CurrentUser>();
-
-        _ = services.AddScoped<ISequenceService, SequenceService>();
+        _ = services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect(
+                configuration.GetConnectionString("Redis")
+                    ?? throw new InvalidOperationException(
+                        "Redis connection string is not configured. Please ensure 'ConnectionStrings:Redis' is set in the application configuration."
+                    )
+            )
+        );
 
         return services;
     }
