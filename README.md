@@ -6,6 +6,19 @@ A learning project exploring backend engineering and system design concepts usin
 
 <img width="1215" height="950" alt="Untitled-2026-05-02-1209" src="https://github.com/user-attachments/assets/114dfa2e-e169-4ecc-9fe3-6557a0abb6a2" />
 
+## Run the system
+
+```shell
+docker-compose up --build
+```
+
+### Services
+
+- API: http://localhost:8080
+- Seq (logs): http://localhost:5341
+- PostgreSQL: localhost:5432
+- Redis: localhost:6379
+
 ## Load Testing
 
 Load tests are written in [k6](https://k6.io) and live in `/load-tests`.
