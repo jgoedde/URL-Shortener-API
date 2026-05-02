@@ -37,6 +37,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation.Tests.Unit", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "load-tests", "load-tests\load-tests.csproj", "{ACEDC42D-7D3A-4986-A3EE-29222D3478C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D39A2137-0B89-44FA-9BB7-686AE97BDC69}"
+	ProjectSection(SolutionItems) = preProject
+		docs\adr-caching.md = docs\adr-caching.md
+		docs\adr-shortcode-generation.md = docs\adr-shortcode-generation.md
+		docs\shorten-process.md = docs\shorten-process.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +90,7 @@ Global
 		{27106CF1-B15D-4274-98BE-3316495ACEEC} = {9DBFD6CA-EFB8-43C7-9BAB-E318EE6F134B}
 		{DB7F98AB-3D02-4652-80BC-681A00168ECC} = {9DBFD6CA-EFB8-43C7-9BAB-E318EE6F134B}
 		{77B504BC-C261-4998-9B09-E2BD1A477AB7} = {9DBFD6CA-EFB8-43C7-9BAB-E318EE6F134B}
+		{D39A2137-0B89-44FA-9BB7-686AE97BDC69} = {179F0BD3-692C-49FD-87A4-D5A23D816BDE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {507BE0AF-5740-4AE0-8EFB-2F84E40BFADB}
