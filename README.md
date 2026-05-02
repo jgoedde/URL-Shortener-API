@@ -1,6 +1,6 @@
 # URL Shortener API
 
-Scalable .NET based URL Shortener API focusing on system design (learning project)
+A learning project exploring backend engineering and system design concepts using .NET - clean architecture, CQRS, distributed caching, and load testing.
 
 ## Load Testing
 
