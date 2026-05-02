@@ -2,9 +2,9 @@ namespace UrlShortener.Application.Urls;
 
 using SimpleBase;
 
-public class UrlEncoder
+public static class UrlEncoder
 {
-    public string GetShortCode(int urlId)
+    public static string GetShortCode(int urlId)
     {
         return Base62.Default.Encode(BitConverter.GetBytes(urlId));
     }

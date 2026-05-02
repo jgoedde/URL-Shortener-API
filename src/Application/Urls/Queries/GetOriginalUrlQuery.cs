@@ -1,6 +1,5 @@
 namespace UrlShortener.Application.Urls.Queries;
 
-using System.ComponentModel.DataAnnotations;
 using Common.Enums;
 using Common.Exceptions;
 using MediatR;
@@ -8,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class GetOriginalUrlQuery : IRequest<string>
 {
-    [Required]
-    public string ShortCode { get; init; }
+    public required string ShortCode { get; init; }
 }
 
 public class GetOriginalUrlHandler(IApplicationDbContext dbContext)
@@ -28,6 +26,6 @@ public class GetOriginalUrlHandler(IApplicationDbContext dbContext)
 
         NotFoundException.ThrowIfNull(url, EntityType.Url);
 
-        return url.OriginalUrl;
+        return url!.OriginalUrl;
     }
 }

@@ -10,7 +10,6 @@ public record ShortenUrlCommand(string LongUrl) : IRequest<Url>;
 
 internal sealed class ShortenUrlHandler(
     IApplicationDbContext dbContext,
-    UrlEncoder urlEncoder,
     ISequenceService sequenceService,
     ICurrentUser currentUser
 ) : IRequestHandler<ShortenUrlCommand, Url>
@@ -25,7 +24,7 @@ internal sealed class ShortenUrlHandler(
         NotFoundException.ThrowIfNull(user, EntityType.User);
 
         var nextId = await sequenceService.NextUrlIdAsync(cancellationToken);
-        var shortCode = urlEncoder.GetShortCode(nextId);
+        var shortCode = UrlEncoder.GetShortCode(nextId);
 
         var entity = new Url
         {

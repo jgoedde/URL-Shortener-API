@@ -9,15 +9,13 @@ using Application;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
+using Serialization;
 using Serilog;
-using UrlShortener.Presentation.Serialization;
 
 [ExcludeFromCodeCoverage]
 public static class WebApplicationBuilderExtensions

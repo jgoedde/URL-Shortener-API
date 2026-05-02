@@ -1,6 +1,5 @@
 namespace UrlShortener.Application.Common.Exceptions;
 
-using System;
 using Enums;
 
 public class NotFoundException(string message) : Exception(message)

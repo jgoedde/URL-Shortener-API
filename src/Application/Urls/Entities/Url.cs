@@ -5,9 +5,9 @@ using Users.Entities;
 
 public class Url : BaseAuditableEntity
 {
-    public string ShortCode { get; set; }
+    public required string ShortCode { get; set; }
 
-    public string OriginalUrl { get; init; }
+    public required string OriginalUrl { get; init; }
 
-    public AppUser CreatedBy { get; init; }
+    public required AppUser CreatedBy { get; init; }
 }
