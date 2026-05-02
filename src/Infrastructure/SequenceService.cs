@@ -1,6 +1,7 @@
-namespace UrlShortener.Infrastructure.Databases.UrlShortener;
+namespace UrlShortener.Infrastructure;
 
-using Application.Urls;
+using Application;
+using Databases.UrlShortener;
 using Microsoft.EntityFrameworkCore;
 
 internal sealed class SequenceService(ApplicationDbContext dbContext) : ISequenceService

@@ -1,4 +1,4 @@
-namespace UrlShortener.Application.Urls;
+namespace UrlShortener.Application;
 
 public interface ISequenceService
 {
