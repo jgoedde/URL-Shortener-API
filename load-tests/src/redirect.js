@@ -3,9 +3,14 @@ import http from "k6/http";
 import { sleep, check } from "k6";
 
 export const options = {
-    vus: 10,
-    duration: "5s",
-    // duration: "1m30s",
+    stages: [
+        { duration: "30s", target: 50 }, // ramp up
+        { duration: "1m", target: 50 }, // steady state
+        { duration: "15s", target: 200 }, // sudden spike (someone tweets your link)
+        { duration: "30s", target: 200 }, // hold spike
+        { duration: "15s", target: 50 }, // back to normal
+        { duration: "30s", target: 0 }, // ramp down
+    ],
     thresholds: {
         http_req_duration: ["p(95)<50", "p(99)<100"],
         http_req_failed: ["rate<0.1"],
@@ -13,65 +18,16 @@ export const options = {
 };
 
 const BASE_URL = __ENV.BASE_URL || "https://localhost:7032";
-const TEST_USER_EMAIL = __ENV.TEST_USER_EMAIL || "test@example.com";
-const TEST_USER_PASSWORD = __ENV.TEST_USER_PASSWORD || "abc";
+const POOL_SIZE = 1000;
+const SHORT_CODES = Array.from(
+    { length: POOL_SIZE },
+    (_, i) => `test_${i + 1}`,
+);
 
-/**
- * @returns {Promise<{token: string}>}
- */
-async function login() {
-    const res = http.post(
-        `${BASE_URL}/api/login`,
-        JSON.stringify({
-            email: TEST_USER_EMAIL,
-            password: TEST_USER_PASSWORD,
-        }),
-
-        { headers: { "Content-Type": "application/json" } },
-    );
-
-    check(res, { "login with test user succeeded": (r) => r.status === 200 });
-
-    return { token: res.json("accessToken") };
-}
-
-/**
- * @returns {Promise<string>}
- */
-async function shortenUrl({ token }) {
-    const res = http.post(
-        `${BASE_URL}/api/urls`,
-        JSON.stringify({ url: "https://example.com" }),
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        },
-    );
-
-    check(res, {
-        "test URL was shortened": (r) => r.status === 201,
-    });
-
-    return res.json("shortUrl");
-}
-
-/**
- * @returns {Promise<{shortUrl: string}>}
- */
-export async function setup() {
-    const { token } = await login();
-    const shortUrl = await shortenUrl({ token });
-
-    return { shortUrl };
-}
-
-/**
- * @param shortUrl {string}
- */
-export default function ({ shortUrl }) {
-    const res = http.get(shortUrl, { redirects: 0 });
+export default function () {
+    const shortCode =
+        SHORT_CODES[Math.floor(Math.random() * SHORT_CODES.length)];
+    const res = http.get(`${BASE_URL}/${shortCode}`, { redirects: 0 });
 
     check(res, {
         "short URL resolved and got 302": (res) => res.status === 302,
@@ -79,5 +35,3 @@ export default function ({ shortUrl }) {
 
     sleep(1);
 }
-
-// TODO: Use random URLs, set up a pool of short URLs to have a more realistic load
