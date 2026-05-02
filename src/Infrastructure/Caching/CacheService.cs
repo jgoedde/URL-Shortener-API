@@ -2,9 +2,13 @@ namespace UrlShortener.Infrastructure.Caching;
 
 using System.Text.Json;
 using Application.Common.Caching;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
-internal sealed class CacheService(IConnectionMultiplexer multiplexer) : ICacheService
+internal sealed partial class CacheService(
+    IConnectionMultiplexer multiplexer,
+    ILogger<CacheService> logger
+) : ICacheService
 {
     private static readonly TimeSpan DefaultExpiration = TimeSpan.FromMinutes(10);
 
@@ -23,11 +27,14 @@ internal sealed class CacheService(IConnectionMultiplexer multiplexer) : ICacheS
             var cacheValue = JsonSerializer.Deserialize<T>(cached.ToString());
             if (cacheValue is not null)
             {
+                this.LogCacheHit(key);
                 return cacheValue;
             }
 
             await database.KeyDeleteAsync(key);
         }
+
+        this.LogCacheMiss(key);
 
         var value = await factory(cancellationToken);
 
@@ -39,4 +46,10 @@ internal sealed class CacheService(IConnectionMultiplexer multiplexer) : ICacheS
 
         return value;
     }
+
+    [LoggerMessage(LogLevel.Debug, "Cache hit for key {Key}")]
+    partial void LogCacheHit(string key);
+
+    [LoggerMessage(LogLevel.Debug, "Cache miss for key {Key}")]
+    partial void LogCacheMiss(string key);
 }
