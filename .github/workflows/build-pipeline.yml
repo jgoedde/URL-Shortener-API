@@ -2,69 +2,23 @@ name: Build Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   pipeline:
     name: Build and Test
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: true
-      matrix:
-        language: ["csharp"]
-
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v6
-
-      - name: Initialize
-        id: initialize
-        run: |
-          NAME=$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')
-          VERSION_PREFIX=$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}
-          BRANCH_CURRENT=${GITHUB_REF#refs/*/}
-          BRANCH_CURRENT=${BRANCH_CURRENT//[^a-zA-Z0-9]/-}
-
-          if [[ ${GITHUB_EVENT_NAME} == 'pull_request' ]]; then
-            BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
-            BRANCH_BASE=${BRANCH_BASE/[^a-zA-Z0-9]//-}
-            BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
-            BRANCH_COMPARE=${BRANCH_COMPARE//[^a-zA-Z0-9]/-}
-            VERSION_SUFFIX="merge-${BRANCH_BASE}-${BRANCH_COMPARE}"
-          elif [[ ${GITHUB_EVENT_NAME} == ${{ github.event.repository.default_branch }} ]]; then
-            VERSION_SUFFIX="${BRANCH_CURRENT}"
-          fi
-
-          if [[ $VERSION_SUFFIX == '' ]]; then
-            DOCKER_TAG=$VERSION_PREFIX
-          else
-            DOCKER_TAG=$VERSION_PREFIX-$VERSION_SUFFIX
-          fi
-
-          echo "name=$(eval printf "%s" "$NAME")" >> $GITHUB_OUTPUT
-          echo "version_prefix=$(eval printf "%s" "$VERSION_PREFIX")" >> $GITHUB_OUTPUT
-          echo "version_suffix=$(eval printf "%s" "$VERSION_SUFFIX")" >> $GITHUB_OUTPUT
-          echo "docker_tag=$(eval printf "%s" "$DOCKER_TAG")" >> $GITHUB_OUTPUT
-          echo "branch=$(eval printf "%s" "$BRANCH_CURRENT")" >> $GITHUB_OUTPUT
-        shell: bash
-
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install dependencies
+        run: dotnet restore
       - name: Build
-        id: build
-        run: docker build .
-          --target coverage
-          --output type=local,dest=out
-          --tag $NAME:$DOCKER_TAG
-          --tag $NAME:latest
-          --build-arg VERSION_PREFIX=$VERSION_PREFIX
-          --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
-        env:
-          DOCKER_BUILDKIT: 1
-          NAME: ${{ steps.initialize.outputs.name }}
-          VERSION_PREFIX: ${{ steps.initialize.outputs.version_prefix }}
-          VERSION_SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
-          DOCKER_TAG: ${{ steps.initialize.outputs.docker_tag }}
+        run: dotnet build --no-restore
+      - name: Test with the dotnet CLI
+        run: dotnet test --no-build
