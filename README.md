@@ -4,7 +4,7 @@ A learning project exploring backend engineering and system design concepts usin
 
 ## Architecture
 
-<img width="1193" height="941" alt="image" src="https://github.com/user-attachments/assets/b4f4323f-bc19-4ec9-894a-63ad2e62ca23" />
+<img width="1215" height="950" alt="Untitled-2026-05-02-1209" src="https://github.com/user-attachments/assets/114dfa2e-e169-4ecc-9fe3-6557a0abb6a2" />
 
 ## Load Testing
 
