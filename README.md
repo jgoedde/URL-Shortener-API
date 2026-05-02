@@ -9,15 +9,50 @@ Load tests are written in [k6](https://k6.io) and live in `/load-tests`.
 ### Running
 
 ```bash
-k6 run -e BASE_URL="http://localhost:5000" load-tests/src/create-url.js
+k6 run -e BASE_URL="http://localhost:5000" load-tests/src/<script-name>.js
 ```
 
 ### Results
 
 <details>
-<summary>POST /api/urls - Shorten URL</summary>
+<summary>GET /{shortCode} — Redirect, 2026-05-02</summary>
 
-**2026-05-01 — 20 VUs, 1m45s, release mode, local PostgreSQL**
+**Parameters:**
+
+- ramp up to 50 VUs → spike to 200VUs
+- Release Mode
+- local PostgreSQL
+- randomized short codes
+- commit: `affd494efd656fbdf32fcbf45d1c1e69498b58d9`
+
+| Metric     | Value       |
+|------------|-------------|
+| Avg        | 8.64ms      |
+| p(95)      | 13.48ms     |
+| p(99)      | 77.09ms     |
+| Max        | 768.14ms    |
+| Throughput | 79.01 req/s |
+| Error rate | 0.00%       |
+
+**Thresholds**
+- ✅ `p(95) < 50ms`
+- ✅ `p(99) < 100ms`
+- ✅ `error rate < 1%`
+- **No caching yet!**
+
+</details>
+
+
+<details>
+<summary>POST /api/urls - Shorten URL, 2026-05-01</summary>
+
+**Parameters:**
+
+- 20 VUs
+- 1m45s
+- local PostgreSQL
+- Release Mode
+- commit `31ca1b7161134cea256577867451a931b1898cbb`
 
 | Metric     | Value       |
 |------------|-------------|
@@ -27,6 +62,11 @@ k6 run -e BASE_URL="http://localhost:5000" load-tests/src/create-url.js
 | Max        | 670.76ms    |
 | Throughput | 14.82 req/s |
 | Error rate | 0.00%       |
+
+**Thresholds**
+- ✅ `p(95) < 300ms`
+- ✅ `p(99) < 500ms`
+- ✅ `error rate < 1%`
 
 </details>
 
