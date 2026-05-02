@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
-using Serialization;
 using Serilog;
 
 [ExcludeFromCodeCoverage]
@@ -58,7 +57,6 @@ public static class WebApplicationBuilderExtensions
             opt.SerializerOptions.Converters.Add(
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             );
-            opt.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
         });
 
         #endregion Serialisation
@@ -149,7 +147,7 @@ internal sealed class BearerSecuritySchemeTransformer(
             document.Components ??= new OpenApiComponents();
             document.Components.SecuritySchemes = securitySchemes;
 
-            foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
+            foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations!))
             {
                 operation.Value.Security ??= [];
                 operation.Value.Security.Add(

@@ -11,6 +11,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <UserSecretsId>1b864be2-9e9c-451d-b986-b3f386b6c103</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'UrlShortener' " />
