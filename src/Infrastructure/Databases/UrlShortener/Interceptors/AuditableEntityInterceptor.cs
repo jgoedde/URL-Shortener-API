@@ -1,9 +1,9 @@
 namespace UrlShortener.Infrastructure.Databases.UrlShortener.Interceptors;
 
+using Application.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Models;
 
 public class AuditableEntityInterceptor(TimeProvider dateTime) : SaveChangesInterceptor
 {

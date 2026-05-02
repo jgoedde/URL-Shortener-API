@@ -1,6 +1,6 @@
 namespace UrlShortener.Application.Urls.Entities;
 
-using Infrastructure.Databases.UrlShortener.Models;
+using Common;
 using Users.Entities;
 
 public class Url : BaseAuditableEntity

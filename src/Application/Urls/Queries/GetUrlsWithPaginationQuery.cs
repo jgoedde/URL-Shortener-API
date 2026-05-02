@@ -1,7 +1,7 @@
 namespace UrlShortener.Application.Urls.Queries;
 
+using Common;
 using Entities;
-using Infrastructure.Databases.UrlShortener.Models;
 using MediatR;
 using Users;
 

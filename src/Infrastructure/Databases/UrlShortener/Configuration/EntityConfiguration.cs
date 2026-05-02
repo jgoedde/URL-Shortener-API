@@ -1,8 +1,8 @@
 namespace UrlShortener.Infrastructure.Databases.UrlShortener.Configuration;
 
+using Application.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Models;
 
 internal abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T>
     where T : BaseAuditableEntity

@@ -1,9 +1,9 @@
 namespace UrlShortener.Presentation.Endpoints;
 
+using Application.Common;
 using Application.Urls.Commands;
 using Application.Urls.Queries;
 using Filters;
-using Infrastructure.Databases.UrlShortener.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

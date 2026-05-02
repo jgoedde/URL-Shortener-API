@@ -1,4 +1,4 @@
-namespace UrlShortener.Infrastructure.Databases.UrlShortener.Models;
+namespace UrlShortener.Application.Common;
 
 public abstract class BaseAuditableEntity
 {

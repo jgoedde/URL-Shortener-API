@@ -1,4 +1,4 @@
-namespace UrlShortener.Infrastructure.Databases.UrlShortener.Models;
+namespace UrlShortener.Application.Common;
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
