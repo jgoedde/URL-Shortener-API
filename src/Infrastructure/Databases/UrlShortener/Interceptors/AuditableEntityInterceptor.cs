@@ -28,7 +28,7 @@ public class AuditableEntityInterceptor(TimeProvider dateTime) : SaveChangesInte
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
-    public void UpdateEntities(DbContext? context)
+    private void UpdateEntities(DbContext? context)
     {
         if (context == null)
         {
@@ -38,17 +38,19 @@ public class AuditableEntityInterceptor(TimeProvider dateTime) : SaveChangesInte
         foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
         {
             if (
-                entry.State is EntityState.Added or EntityState.Modified
-                || entry.HasChangedOwnedEntities()
+                entry.State is not (EntityState.Added or EntityState.Modified)
+                && !entry.HasChangedOwnedEntities()
             )
             {
-                var utcNow = dateTime.GetUtcNow();
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.Created = utcNow;
-                }
-                entry.Entity.LastModified = utcNow;
+                continue;
             }
+
+            var utcNow = dateTime.GetUtcNow();
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.Created = utcNow;
+            }
+            entry.Entity.LastModified = utcNow;
         }
     }
 }
