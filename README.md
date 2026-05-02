@@ -23,7 +23,7 @@ k6 run -e BASE_URL="http://localhost:5000" load-tests/src/<script-name>.js
 - Release Mode
 - local PostgreSQL
 - randomized short codes
-- commit: `affd494efd656fbdf32fcbf45d1c1e69498b58d9`
+- commit: [`affd494efd656fbdf32fcbf45d1c1e69498b58d9`](https://github.com/jgoedde/URL-Shortener-API/commit/affd494efd656fbdf32fcbf45d1c1e69498b58d9)
 
 | Metric     | Value       |
 |------------|-------------|
@@ -52,7 +52,7 @@ k6 run -e BASE_URL="http://localhost:5000" load-tests/src/<script-name>.js
 - 1m45s
 - local PostgreSQL
 - Release Mode
-- commit `31ca1b7161134cea256577867451a931b1898cbb`
+- commit [`31ca1b7161134cea256577867451a931b1898cbb`](https://github.com/jgoedde/URL-Shortener-API/commit/31ca1b7161134cea256577867451a931b1898cbb)
 
 | Metric     | Value       |
 |------------|-------------|
