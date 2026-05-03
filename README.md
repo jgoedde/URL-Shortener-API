@@ -15,7 +15,9 @@ docker-compose up --build
 ### Services
 
 - API: http://localhost:8080
+  - Swagger: http://localhost:8080/swagger
 - Seq (logs): http://localhost:5341
+  - The initial admin password is `seqadmin`
 - PostgreSQL: localhost:5432
 - Redis: localhost:6379
 
