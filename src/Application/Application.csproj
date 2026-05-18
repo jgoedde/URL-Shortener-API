@@ -9,7 +9,7 @@
       Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
       Version="10.0.7"
     />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
     <PackageReference Include="SimpleBase" Version="5.6.0" />
   </ItemGroup>
 
