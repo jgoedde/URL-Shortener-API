@@ -1,0 +1,35 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="codecov.yml" />
+    <File Path="docker-compose.yml" />
+    <File Path="Dockerfile" />
+    <File Path="global.json" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Solution Items/docs/">
+    <File Path="docs/adr-caching.md" />
+    <File Path="docs/adr-shortcode-generation.md" />
+    <File Path="docs/shorten-process.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Application/Application.csproj" />
+    <Project Path="src/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/Presentation/Presentation.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Application.Tests.Unit/Application.Tests.Unit.csproj" />
+    <Project Path="tests/Infrastructure.Tests.Integration/Infrastructure.Tests.Integration.csproj" />
+    <Project Path="tests/Presentation.Tests.Integration/Presentation.Tests.Integration.csproj" />
+    <Project Path="tests/Presentation.Tests.Unit/Presentation.Tests.Unit.csproj" />
+  </Folder>
+  <Project Path="load-tests/load-tests.csproj">
+    <BuildType Project="?" />
+    <Platform Project="?" />
+    <Build Project="false" />
+  </Project>
+</Solution>
